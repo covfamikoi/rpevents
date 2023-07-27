@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { List, useTheme } from "react-native-paper";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -14,35 +14,16 @@ import AddConference from "../components/AddConference";
 type Props = StackScreenProps<RootStackParamList, "Home">;
 
 export default function Home({ navigation }: Props) {
-  let theme = useTheme();
+  const theme = useTheme();
 
-  let [data, setData] = useState<Conference[]>([]);
-  let [listItems, setListItems] = useState<React.JSX.Element[]>([]);
-  let [refreshing, setRefreshing] = useState(false);
-
-  let [knownPasswords, _setKnownPasswords] = useKnownPasswords();
-  let [user, _admin] = useAuthInfo();
-
+  const [data, setData] = useState<Conference[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
   const [addConf, setAddConf] = useState(false);
 
-  async function refreshData() {
-    if (refreshing) {
-      return;
-    }
-    setRefreshing(true);
-    try {
-      const conferences = await getConferences(user, knownPasswords);
-      setData(conferences);
-    } finally {
-      setRefreshing(false);
-    }
-  }
+  const [knownPasswords, _setKnownPasswords] = useKnownPasswords();
+  const [user, _admin] = useAuthInfo();
 
-  useEffect(() => {
-    refreshData();
-  }, [user, knownPasswords]);
-
-  useEffect(() => {
+  const listItems = useMemo(() => {
     let items = [
       <List.Item
         titleStyle={{ color: theme.colors.primary }}
@@ -65,8 +46,25 @@ export default function Home({ navigation }: Props) {
         );
       }),
     );
-    setListItems(items);
+    return items;
   }, [data]);
+
+  async function refreshData() {
+    if (refreshing) {
+      return;
+    }
+    setRefreshing(true);
+    try {
+      const conferences = await getConferences(user, knownPasswords);
+      setData(conferences);
+    } finally {
+      setRefreshing(false);
+    }
+  }
+
+  useEffect(() => {
+    refreshData();
+  }, [user, knownPasswords]);
 
   return (
     <View style={{ flex: 1 }}>
