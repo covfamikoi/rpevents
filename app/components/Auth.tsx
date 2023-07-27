@@ -47,7 +47,7 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
     "auth/user-not-found",
   ].includes(error);
   const errPassword = ["auth/missing-password", "auth/wrong-password"].includes(
-    error
+    error,
   );
 
   return (

@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 // Optionally import the services that you want to use
 import { getAuth } from "firebase/auth";
 // import {...} from "firebase/database";
@@ -12,7 +12,7 @@ const firebaseConfig = {
   projectId: "rpevents-62c34",
   storageBucket: "rpevents-62c34.appspot.com",
   messagingSenderId: "490747286947",
-  appId: "1:490747286947:web:8c816b812edd9e4fa8b616"
+  appId: "1:490747286947:web:8c816b812edd9e4fa8b616",
 };
 
 // Initialize Firebase

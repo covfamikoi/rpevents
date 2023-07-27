@@ -18,8 +18,8 @@ export async function getConferences(user: User | null, passwords: string[]) {
       await getDocs(
         query(
           collection(fireDb, "conferences"),
-          where("admins", "array-contains", user.email!)
-        )
+          where("admins", "array-contains", user.email!),
+        ),
       )
     ).forEach((conf) => {
       ids.push(conf.id);
@@ -34,7 +34,7 @@ export async function getConferences(user: User | null, passwords: string[]) {
         return getDoc(doc(fireDb, "conferences", pwd)).then((conf) => {
           return conf.data()! as Conference;
         });
-      })
+      }),
   );
   conferences.push(...thing);
 

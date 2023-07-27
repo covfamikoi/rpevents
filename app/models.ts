@@ -4,7 +4,7 @@ export interface Admin {
 }
 
 export interface Announcement {
-  title: string,
+  title: string;
   content: string;
   postedAt: any;
 }

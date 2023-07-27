@@ -29,7 +29,7 @@ export function MModalActions({
         {submitTitle}
       </Button>
     </View>
-  )
+  );
 }
 
 interface MModalHeaderProps {
@@ -44,7 +44,7 @@ export function MModalHeader({ title, onClose }: MModalHeaderProps) {
       <View style={{ flex: 1 }}></View>
       <IconButton icon="close" onPress={onClose} />
     </View>
-  )
+  );
 }
 
 interface MModalProps {
@@ -72,5 +72,5 @@ export function MModal({ visible, onClose, children }: MModalProps) {
     >
       {children}
     </Modal>
-  )
+  );
 }
