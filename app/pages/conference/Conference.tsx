@@ -1,11 +1,12 @@
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../../App";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { StackScreenProps } from "@react-navigation/stack";
 
+import CalendarTab from "./CalendarTab";
 import HomeTab from "./HomeTab";
 import MapTab from "./MapTab";
-import CalendarTab from "./CalendarTab";
 import SettingsTab from "./SettingsTab";
+
+import { RootStackParamList } from "../../App";
 
 type Props = StackScreenProps<RootStackParamList, "Conference">;
 const Tab = createMaterialBottomTabNavigator();

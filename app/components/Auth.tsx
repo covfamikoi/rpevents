@@ -1,21 +1,21 @@
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useState } from "react";
 import { View } from "react-native";
 import {
-  Portal,
-  Text,
-  withTheme,
-  MD3Theme,
   HelperText,
+  MD3Theme,
+  Portal,
+  withTheme,
 } from "react-native-paper";
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
 
-import { Tabs, TabButton } from "./Tabs";
-import { fireAuth } from "../firebaseConfig";
-import { MModal, MModalActions, MModalHeader } from "./MModal";
 import { EmailTextInput, PasswordTextInput } from "./Inputs";
+import { MModal, MModalActions, MModalHeader } from "./MModal";
+import { TabButton, Tabs } from "./Tabs";
+
+import { fireAuth } from "../firebaseConfig";
 
 interface Props {
   visible: boolean;

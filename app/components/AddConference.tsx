@@ -1,18 +1,19 @@
-import { HelperText, Portal, Text, useTheme } from "react-native-paper";
-import { useEffect, useMemo, useState } from "react";
-
-import { useAuthInfo } from "../hooks";
-import { MModal, MModalActions, MModalHeader } from "./MModal";
-import { View } from "react-native";
 import { doc, getDoc } from "firebase/firestore";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
+import { HelperText, Portal, useTheme } from "react-native-paper";
 
+import { NavigationProp } from "@react-navigation/native";
+
+import { ConfKeyTextInput } from "./Inputs";
+import { MModal, MModalActions, MModalHeader } from "./MModal";
 import { TabButton, Tabs } from "./Tabs";
-import { ConfKeyTextInput, MTextInput } from "./Inputs";
-import { fireDb } from "../firebaseConfig";
+
 import { RootStackParamList } from "../App";
-import { Conference } from "../models";
+import { fireDb } from "../firebaseConfig";
 import { useKnownPasswords } from "../global";
+import { useAuthInfo } from "../hooks";
+import { Conference } from "../models";
 
 interface ScreenProps {
   onClose: () => void;

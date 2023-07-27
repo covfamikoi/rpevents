@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { User, onAuthStateChanged } from "firebase/auth";
-
-import { Admin } from "./models";
-import { fireAuth, fireDb } from "./firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+
+import { fireAuth, fireDb } from "./firebaseConfig";
+import { Admin } from "./models";
 
 export function useAuthInfo(): [User | null, Admin | null] {
   const [user, setUser] = useState<User | null>(null);

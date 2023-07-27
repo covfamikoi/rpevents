@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { List, useTheme } from "react-native-paper";
+
 import { StackScreenProps } from "@react-navigation/stack";
 
 import { RootStackParamList } from "../App";
-import { Conference } from "../models";
+import AddConference from "../components/AddConference";
 import { getConferences } from "../database";
 import { useKnownPasswords } from "../global";
 import { useAuthInfo } from "../hooks";
-import { View } from "react-native";
-import AddConference from "../components/AddConference";
+import { Conference } from "../models";
 
 type Props = StackScreenProps<RootStackParamList, "Home">;
 

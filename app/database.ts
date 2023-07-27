@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import {
   collection,
   doc,
@@ -6,9 +7,9 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { Conference } from "./models";
+
 import { fireDb } from "./firebaseConfig";
-import { User } from "firebase/auth";
+import { Conference } from "./models";
 
 export async function getConferences(user: User | null, passwords: string[]) {
   let ids: string[] = [];

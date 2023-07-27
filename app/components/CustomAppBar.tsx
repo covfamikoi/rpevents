@@ -1,12 +1,14 @@
-import { Appbar, Divider, Menu } from "react-native-paper";
-import { getHeaderTitle } from "@react-navigation/elements";
-import { StackHeaderProps } from "@react-navigation/stack";
+import { sendPasswordResetEmail, signOut } from "firebase/auth";
 import { useState } from "react";
 import { View } from "react-native";
+import { Appbar, Divider, Menu } from "react-native-paper";
+
+import { getHeaderTitle } from "@react-navigation/elements";
+import { StackHeaderProps } from "@react-navigation/stack";
 
 import AuthPopup from "./Auth";
+
 import { fireAuth } from "../firebaseConfig";
-import { sendPasswordResetEmail, signOut } from "firebase/auth";
 import { useAuthInfo } from "../hooks";
 
 export default function CustomAppBar(props: StackHeaderProps) {
