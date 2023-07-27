@@ -1,13 +1,10 @@
 import { initializeApp } from 'firebase/app';
 // Optionally import the services that you want to use
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 // import {...} from "firebase/database";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 // import {...} from "firebase/functions";
 // import {...} from "firebase/storage";
-
-import { useAdmin, useUser } from './global';
-import { Admin } from './models';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDatCB6TIgHsV7y8KQIun6tA7UQaR1cTTw",
