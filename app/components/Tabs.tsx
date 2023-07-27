@@ -21,14 +21,19 @@ export function Tabs({ children }: TabsProps) {
   );
 }
 
-interface TabButtonProps {
-  value: string;
-  tab: string;
-  setTab: (arg0: string) => void;
+interface TabButtonProps<T> {
+  value: T;
+  tab: T;
+  setTab: (arg0: T) => void;
   children: ReactNode;
 }
 
-export function TabButton({ value, tab, setTab, children }: TabButtonProps) {
+export function TabButton<T>({
+  value,
+  tab,
+  setTab,
+  children,
+}: TabButtonProps<T>) {
   return (
     <Button
       onPress={() => setTab(value)}
