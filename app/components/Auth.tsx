@@ -1,4 +1,6 @@
 import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -8,6 +10,7 @@ import {
   HelperText,
   MD3Theme,
   Portal,
+  Text,
   withTheme,
 } from "react-native-paper";
 
@@ -105,32 +108,80 @@ function SignupScreen({ onClose }: ScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [error, setError] = useState("");
+
+  function submit() {
+    if (email.length === 0) {
+      return setError("auth/missing-email");
+    }
+    if (password.length === 0) {
+      return setError("auth/missing-password");
+    }
+    if (password !== password2) {
+      return setError("password-mismatch");
+    }
+
+    createUserWithEmailAndPassword(fireAuth, email, password)
+      .then((user) => {
+        onClose();
+        sendEmailVerification(user.user).then(() =>
+          alert("Please check your email for verification."),
+        );
+      })
+      .catch((err) => setError(err.code));
+  }
+
+  const errEmail = ["auth/invalid-email", "auth/missing-email"].includes(error);
+  let errPassword: string | null = null;
+  switch (error) {
+    case "auth/missing-password":
+      errPassword = "Please enter a password.";
+    case "auth/weak-password":
+      errPassword = "Your password is too weak.";
+  }
+  const errPassword2 = ["password-mismatch"].includes(error);
 
   return (
     <View>
       <EmailTextInput
         label="Enter your email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(v) => {
+          setEmail(v);
+          setError("");
+        }}
       />
+      {errEmail ? <HelperText type="error">Invalid email</HelperText> : null}
       <PasswordTextInput
         style={{ marginTop: 5 }}
         label="Choose a password"
         autoComplete="new-password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(v) => {
+          setPassword(v);
+          setError("");
+        }}
       />
+      {errPassword !== null ? (
+        <HelperText type="error">{errPassword}</HelperText>
+      ) : null}
       <PasswordTextInput
         style={{ marginTop: 5 }}
         label="Re-enter your password"
         autoComplete="new-password"
         value={password2}
-        onChangeText={setPassword2}
+        onChangeText={(v) => {
+          setPassword2(v);
+          setError("");
+        }}
       />
+      {errPassword2 ? (
+        <HelperText type="error">Passwords do not match</HelperText>
+      ) : null}
 
       <MModalActions
         onClose={onClose}
-        onSubmit={() => alert()}
+        onSubmit={submit}
         submitTitle="Sign Up"
       />
     </View>

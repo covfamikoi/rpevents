@@ -56,6 +56,15 @@ export default function Home({ navigation }: Props) {
     }
     setRefreshing(true);
     try {
+      if (user !== null) {
+        await user.reload();
+        if (
+          user.emailVerified !==
+          (await user.getIdTokenResult(false)).claims.email_verified
+        ) {
+          await user.getIdToken(true);
+        }
+      }
       const conferences = await getConferences(user, knownPasswords);
       setData(conferences);
     } finally {

@@ -1,4 +1,8 @@
-import { sendPasswordResetEmail, signOut } from "firebase/auth";
+import {
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signOut,
+} from "firebase/auth";
 import { useState } from "react";
 import { View } from "react-native";
 import { Appbar, Divider, Menu } from "react-native-paper";
@@ -46,6 +50,18 @@ export default function CustomAppBar(props: StackHeaderProps) {
               leadingIcon="account"
               dense={true}
             />
+            {user.emailVerified ? null : (
+              <Menu.Item
+                title="Resend Verification Email"
+                leadingIcon="alert-outline"
+                onPress={() =>
+                  sendEmailVerification(user).then(() => {
+                    setUserMenu(false);
+                    alert("Verification email sent.");
+                  })
+                }
+              />
+            )}
             <Divider style={{ marginVertical: 8 }} />
             <Menu.Item onPress={() => signOut(fireAuth)} title="Sign Out" />
             <Menu.Item
