@@ -4761,6 +4761,11 @@ json-schema-deref-sync@^0.13.0:
     traverse "~0.6.6"
     valid-url "~1.0.9"
 
+json-storage-formatter@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/json-storage-formatter/-/json-storage-formatter-1.0.8.tgz#96e1f9a5a1dc401568fa79ba0d68b3fd0d8e07c7"
+  integrity sha512-/Z+NZM9wKAz/MLZAQpAGEwmbJUolBPq94+FY+esKYlwev2flhr6L8LIOBHh9LilIrSFpfFSyBGG3xfh8gzwZyw==
+
 json5@^2.1.1, json5@^2.2.2:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
@@ -6105,6 +6110,13 @@ react-native-gesture-handler@^2.12.0:
     invariant "^2.2.4"
     lodash "^4.17.21"
     prop-types "^15.7.2"
+
+react-native-global-state-hooks@^5.0.15:
+  version "5.0.15"
+  resolved "https://registry.yarnpkg.com/react-native-global-state-hooks/-/react-native-global-state-hooks-5.0.15.tgz#7fd8edf5f92104913fd5d8872ea5b40b1f02c7dc"
+  integrity sha512-Ilu1RYPwmCfPwPjnS3/40IILB5VNEXVAAn4Proj6hdCTA6UF9/ge6+DfP+9ybZIKtFNlm2QB+F0PKLV3BI2WcQ==
+  dependencies:
+    json-storage-formatter "^1.0.8"
 
 react-native-paper@^5.9.1:
   version "5.9.1"

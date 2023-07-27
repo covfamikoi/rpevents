@@ -11,7 +11,13 @@ import {
   Button,
   MD3Theme,
 } from "react-native-paper";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
+
 import TabButton from "./TabButton";
+import { fireAuth } from "../firebaseConfig";
 
 interface Props {
   visible: boolean;
@@ -19,21 +25,65 @@ interface Props {
   theme: MD3Theme;
 }
 
-interface SigninProps {
+interface ScreenProps {
   setTab: (arg0: string) => void;
   theme: MD3Theme;
   onClose: () => void;
 }
 
-interface ScreenProps {
-  onClose: () => void;
-}
+function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-function SigninScreen({ setTab, theme, onClose }: SigninProps) {
+  function signIn() {
+    if (email.length === 0) {
+      return setError("auth/missing-email");
+    }
+    if (password.length === 0) {
+      return setError("auth/missing-password");
+    }
+
+    signInWithEmailAndPassword(fireAuth, email, password)
+      .then((_) => onClose())
+      .catch((err) => setError(err.code));
+  }
+
   return (
     <View>
-      <TextInput label="Email" mode="outlined" />
-      <TextInput style={{ marginTop: 5 }} label="Password" mode="outlined" />
+      <TextInput
+        mode="outlined"
+        label="Email"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="email-address"
+        value={email}
+        onChangeText={(v) => {
+          setEmail(v);
+          setError("");
+        }}
+      />
+      {[
+        "auth/invalid-email",
+        "auth/missing-email",
+        "auth/user-not-found",
+      ].includes(error) ? (
+        <Text style={{ color: theme.colors.error }}>Invalid Email</Text>
+      ) : null}
+      <TextInput
+        style={{ marginTop: 5 }}
+        mode="outlined"
+        label="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={(v) => {
+          setPassword(v);
+          setError("");
+        }}
+      />
+      {["auth/missing-password", "auth/wrong-password"].includes(error) ? (
+        <Text style={{ color: theme.colors.error }}>Invalid Password</Text>
+      ) : null}
       <Text
         style={{ marginTop: 5, color: theme.colors.primary }}
         onPress={() => setTab("Reset Password")}
@@ -52,7 +102,7 @@ function SigninScreen({ setTab, theme, onClose }: SigninProps) {
         <Button onPress={onClose} style={{ marginRight: 10 }}>
           Cancel
         </Button>
-        <Button onPress={() => alert()} mode="contained">
+        <Button onPress={signIn} mode="contained">
           Sign In
         </Button>
       </View>
@@ -60,15 +110,37 @@ function SigninScreen({ setTab, theme, onClose }: SigninProps) {
   );
 }
 
-function SignupScreen({onClose}: ScreenProps) {
+function SignupScreen({ onClose }: ScreenProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+
   return (
     <View>
-      <TextInput label="Enter your email" mode="outlined" />
-      <TextInput style={{ marginTop: 5 }} label="Choose a password" mode="outlined" />
+      <TextInput
+        mode="outlined"
+        label="Enter your email"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+      />
       <TextInput
         style={{ marginTop: 5 }}
-        label="Re-enter password"
         mode="outlined"
+        label="Choose a password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={setPassword}
+      />
+      <TextInput
+        style={{ marginTop: 5 }}
+        mode="outlined"
+        label="Re-enter your password"
+        secureTextEntry={true}
+        value={password2}
+        onChangeText={setPassword2}
       />
 
       <View
@@ -86,16 +158,45 @@ function SignupScreen({onClose}: ScreenProps) {
           Sign Up
         </Button>
       </View>
-
-
     </View>
   );
 }
 
-function ResetScreen({onClose}: ScreenProps) {
+function ResetScreen({ onClose, theme, setTab }: ScreenProps) {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+
+  function resetPassword() {
+    if (email.length === 0) {
+      return setError("auth/missing-email");
+    }
+
+    sendPasswordResetEmail(fireAuth, email)
+      .then((ret) => setTab("Sign In"))
+      .catch((err) => setError(err.code));
+  }
+
   return (
     <View>
-      <TextInput label="Enter your email" mode="outlined" />
+      <TextInput
+        mode="outlined"
+        label="Enter your email"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="email-address"
+        value={email}
+        onChangeText={(v) => {
+          setEmail(v);
+          setError("");
+        }}
+      />
+      {[
+        "auth/invalid-email",
+        "auth/missing-email",
+        "auth/user-not-found",
+      ].includes(error) ? (
+        <Text style={{ color: theme.colors.error }}>Invalid Email</Text>
+      ) : null}
       <View
         style={{
           marginVertical: 20,
@@ -107,12 +208,12 @@ function ResetScreen({onClose}: ScreenProps) {
         <Button onPress={onClose} style={{ marginRight: 10 }}>
           Cancel
         </Button>
-        <Button onPress={() => alert()} mode="contained">
+        <Button onPress={resetPassword} mode="contained">
           Send Email
         </Button>
       </View>
     </View>
-  )
+  );
 }
 
 function AuthPopup({ visible, onClose, theme }: Props) {
@@ -160,11 +261,29 @@ function AuthPopup({ visible, onClose, theme }: Props) {
           {(function () {
             switch (tab) {
               case "Reset Password":
-                return <ResetScreen onClose={onClose} />;
+                return (
+                  <ResetScreen
+                    onClose={onClose}
+                    theme={theme}
+                    setTab={setTab}
+                  />
+                );
               case "Sign In":
-                return <SigninScreen setTab={setTab} theme={theme} onClose={onClose} />;
+                return (
+                  <SigninScreen
+                    setTab={setTab}
+                    theme={theme}
+                    onClose={onClose}
+                  />
+                );
               case "Sign Up":
-                return <SignupScreen onClose={onClose} />;
+                return (
+                  <SignupScreen
+                    onClose={onClose}
+                    theme={theme}
+                    setTab={setTab}
+                  />
+                );
             }
           })()}
         </View>

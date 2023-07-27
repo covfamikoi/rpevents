@@ -1,10 +1,13 @@
 import { initializeApp } from 'firebase/app';
 // Optionally import the services that you want to use
-// import {...} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 // import {...} from "firebase/database";
-// import {...} from "firebase/firestore";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 // import {...} from "firebase/functions";
 // import {...} from "firebase/storage";
+
+import { useAdmin, useUser } from './global';
+import { Admin } from './models';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDatCB6TIgHsV7y8KQIun6tA7UQaR1cTTw",
@@ -16,7 +19,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-app.automaticDataCollectionEnabled = false;
-// For more information on how to access Firebase in your project,
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
+export const fireApp = initializeApp(firebaseConfig);
+fireApp.automaticDataCollectionEnabled = false;
+
+export const fireAuth = getAuth(fireApp);
+export const fireDb = getFirestore(fireApp);

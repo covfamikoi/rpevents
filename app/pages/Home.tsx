@@ -1,34 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { List } from "react-native-paper";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import PublicConference from "../models/public_conference";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../App";
+import { Conference } from "../models";
+import { getConferences } from "../database";
+import { useKnownPasswords, useUser } from "../global";
 
 type Props = StackScreenProps<RootStackParamList, "Home">;
 
 export default function Home({ navigation }: Props) {
-  let [data, setData] = useState<Array<PublicConference> | undefined>(
-    undefined
-  );
+  let [data, setData] = useState<Conference[] | null>(null);
   let [refreshing, setRefreshing] = useState(false);
+  let [knownPasswords, _setKnownPasswords] = useKnownPasswords();
+  let [user, _setUser] = useUser();
 
-  async function refreshData(allowCache: boolean = true) {
-    setRefreshing(true);
-    let data;
-    if (allowCache) {
-      data = await PublicConference.get();
-    } else {
-      data = await PublicConference.fetch();
+  async function refreshData() {
+    if (refreshing) {
+      return;
     }
-    setData(data);
-    setRefreshing(false);
+    setRefreshing(true);
+    try {
+      const conferences = await getConferences(user, knownPasswords);
+      setData(conferences);
+    } finally {
+      setRefreshing(false);
+    }
   }
 
-  if (data === undefined && !refreshing) {
+  if (data === null) {
     refreshData();
   }
+
+  useEffect(() => {refreshData();}, [user]);
 
   return (
     <FlatList
@@ -41,7 +46,7 @@ export default function Home({ navigation }: Props) {
           title={item.item.title}
           onPress={() =>
             navigation.navigate("Conference", {
-              publicConference: item.item,
+              conference: item.item,
             })
           }
         />

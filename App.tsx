@@ -1,68 +1,28 @@
-import {} from "./firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import App from "./app/App";
+import { useAdmin, useUser } from "./app/global";
+import { fireAuth, fireDb } from "./app/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import { Admin } from "./app/models";
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { StatusBar } from "expo-status-bar";
-import {
-  MD3DarkTheme,
-  MD3LightTheme,
-  PaperProvider,
-  adaptNavigationTheme,
-} from "react-native-paper";
-import { useColorScheme } from "react-native";
-import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from "@react-navigation/native";
+export default function Main() {
+  const [user, setUser] = useUser();
+  const [_admin, setAdmin] = useAdmin();
 
-import Home from "./app/pages/Home";
-import CustomAppBar from "./app/components/CustomAppBar";
-import Conference from "./app/pages/conference/Conference";
-import PublicConference from "./app/models/public_conference";
+  onAuthStateChanged(fireAuth, (newUser) => {
+    if (user === newUser) {
+      return null;
+    }
+    setUser(newUser);
 
-export type RootStackParamList = {
-  Home: undefined;
-  Conference: { publicConference: PublicConference };
-};
-
-const Stack = createStackNavigator<RootStackParamList>();
-
-export default function App() {
-  const colorScheme = useColorScheme();
-  const { theme } = useMaterial3Theme();
-
-  const paperTheme =
-    colorScheme === "dark"
-      ? { ...MD3DarkTheme, colors: theme.dark }
-      : { ...MD3LightTheme, colors: theme.light };
-
-  const { LightTheme, DarkTheme } = adaptNavigationTheme({
-    reactNavigationLight: NavigationDefaultTheme,
-    reactNavigationDark: NavigationDarkTheme,
+    if (user?.emailVerified) {
+      getDoc(doc(fireDb, "admins", user.email!)).then((document) => {
+        const data = document.data();
+        const admin = data === undefined ? null : data as Admin;
+        setAdmin(admin);
+      });
+    }
   });
-  const navigationTheme = colorScheme === "dark" ? DarkTheme : LightTheme;
 
-  return (
-    <PaperProvider theme={paperTheme}>
-      <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator
-          screenOptions={{
-            header: (props) => <CustomAppBar {...props} />,
-          }}
-        >
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen
-            name="Conference"
-            component={Conference}
-            options={({ route }) => ({
-              title: route.params.publicConference.title,
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-
-      <StatusBar style="auto" />
-    </PaperProvider>
-  );
+  return <App />
 }
