@@ -6,7 +6,7 @@ import AuthPopup from "./Auth";
 
 export default function CustomAppBar(props: StackHeaderProps) {
   const title = getHeaderTitle(props.options, props.route.name);
-  let [adminPopup, setAdminPopup] = useState(false);
+  const [adminPopup, setAdminPopup] = useState(false);
 
   return (
     <Appbar.Header mode="small">

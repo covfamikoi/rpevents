@@ -16,7 +16,7 @@ export default class PublicConference {
 
   static async get(): Promise<Array<PublicConference>> {
     // todo: invalidate cache
-    let cached = this.cached();
+    const cached = this.cached();
     if (cached !== null) {
       return cached;
     }
