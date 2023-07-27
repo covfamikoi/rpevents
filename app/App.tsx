@@ -16,7 +16,6 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 
 import CustomAppBar from "./components/CustomAppBar";
-import "./firebaseConfig";
 import { Conference } from "./models";
 import Home from "./pages/Home";
 import ConferenceView from "./pages/conference/Conference";
