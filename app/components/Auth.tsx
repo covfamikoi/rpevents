@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { Portal, Text, withTheme, MD3Theme } from "react-native-paper";
+import {
+  Portal,
+  Text,
+  withTheme,
+  MD3Theme,
+  HelperText,
+} from "react-native-paper";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -47,7 +53,7 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
     "auth/user-not-found",
   ].includes(error);
   const errPassword = ["auth/missing-password", "auth/wrong-password"].includes(
-    error,
+    error
   );
 
   return (
@@ -62,7 +68,7 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
         error={errEmail}
       />
       {errEmail ? (
-        <Text style={{ color: theme.colors.error }}>Invalid Email</Text>
+        <HelperText type="error">Incorrect or invalid email</HelperText>
       ) : null}
       <PasswordTextInput
         style={{ marginTop: 5 }}
@@ -76,14 +82,15 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
         error={errPassword}
       />
       {errPassword ? (
-        <Text style={{ color: theme.colors.error }}>Invalid Password</Text>
+        <HelperText type="error">Incorrect or invalid password</HelperText>
       ) : null}
-      <Text
-        style={{ marginTop: 5, color: theme.colors.primary }}
+      <HelperText
+        type="info"
+        style={{ color: theme.colors.primary, marginTop: 5 }}
         onPress={() => setTab("Reset Password")}
       >
         Forgot Password
-      </Text>
+      </HelperText>
 
       <MModalActions
         onClose={onClose}
@@ -162,7 +169,7 @@ function ResetScreen({ onClose, theme, setTab }: ScreenProps) {
         error={errEmail}
       />
       {errEmail ? (
-        <Text style={{ color: theme.colors.error }}>Invalid Email</Text>
+        <HelperText type="error">Invalid Email</HelperText>
       ) : null}
 
       <MModalActions

@@ -1,4 +1,4 @@
-import { Portal, Text, useTheme } from "react-native-paper";
+import { HelperText, Portal, Text, useTheme } from "react-native-paper";
 import { useEffect, useMemo, useState } from "react";
 
 import { useAuthInfo } from "../hooks";
@@ -65,14 +65,15 @@ function JoinConference({ onClose, navigation }: ScreenProps) {
     <View>
       <ConfKeyTextInput
         label="Conference Key"
+        error={error !== null}
         onChangeText={(v) => {
           setPassword(v);
-          setError("");
+          setError(null);
         }}
         autoFocus={true}
       />
       {error === null ? null : (
-        <Text style={{ color: theme.colors.error }}>{error}</Text>
+        <HelperText type="error">{error}</HelperText>
       )}
       <MModalActions onClose={onClose} onSubmit={submit} submitTitle="Join" />
     </View>
