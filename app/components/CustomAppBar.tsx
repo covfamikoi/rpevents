@@ -1,16 +1,19 @@
-import { Appbar } from "react-native-paper";
+import { Appbar, Divider, Menu } from "react-native-paper";
 import { getHeaderTitle } from "@react-navigation/elements";
 import { StackHeaderProps } from "@react-navigation/stack";
 import { useState } from "react";
+import { View } from "react-native";
 
 import AuthPopup from "./Auth";
-import { useUser } from "../global";
-import { View } from "react-native";
+import { fireAuth } from "../firebaseConfig";
+import { sendPasswordResetEmail, signOut } from "firebase/auth";
+import { useAuthInfo } from "../hooks";
 
 export default function CustomAppBar(props: StackHeaderProps) {
   const title = getHeaderTitle(props.options, props.route.name);
   const [adminPopup, setAdminPopup] = useState(false);
-  const [user, _setUser] = useUser();
+  const [userMenu, setUserMenu] = useState(false);
+  const [user, _admin] = useAuthInfo();
 
   return (
     <Appbar.Header mode="small">
@@ -18,7 +21,7 @@ export default function CustomAppBar(props: StackHeaderProps) {
         <Appbar.BackAction onPress={props.navigation.goBack} />
       ) : null}
       <Appbar.Content title={title} />
-      {user === null || true ? (
+      {user === null ? (
         <View>
           <Appbar.Action icon="account" onPress={() => setAdminPopup(true)} />
           <AuthPopup
@@ -28,7 +31,31 @@ export default function CustomAppBar(props: StackHeaderProps) {
         </View>
       ) : (
         <View>
-          <Appbar.Action icon="account" onPress={() => alert("todo")} />
+          <Menu
+            visible={userMenu}
+            onDismiss={() => setUserMenu(false)}
+            anchor={
+              <Appbar.Action icon="account" onPress={() => setUserMenu(true)} />
+            }
+          >
+            <Menu.Item
+              title={user.email}
+              disabled={true}
+              leadingIcon="account"
+              dense={true}
+            />
+            <Divider style={{ marginVertical: 8 }} />
+            <Menu.Item onPress={() => signOut(fireAuth)} title="Sign Out" />
+            <Menu.Item
+              onPress={() => {
+                sendPasswordResetEmail(fireAuth, user.email!).then(() => {
+                  setUserMenu(false);
+                  alert("Password reset email sent.");
+                });
+              }}
+              title="Change Password"
+            />
+          </Menu>
         </View>
       )}
     </Appbar.Header>

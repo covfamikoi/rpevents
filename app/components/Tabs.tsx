@@ -6,7 +6,7 @@ interface TabsProps {
   children: ReactNode;
 }
 
-export function Tabs({children}: TabsProps) {
+export function Tabs({ children }: TabsProps) {
   return (
     <View
       style={{
@@ -15,8 +15,10 @@ export function Tabs({children}: TabsProps) {
         alignItems: "center",
         marginVertical: 10,
       }}
-    >{children}</View>
-  )
+    >
+      {children}
+    </View>
+  );
 }
 
 interface TabButtonProps {

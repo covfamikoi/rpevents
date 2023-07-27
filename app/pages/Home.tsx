@@ -6,7 +6,8 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
 import { Conference } from "../models";
 import { getConferences } from "../database";
-import { useKnownPasswords, useUser } from "../global";
+import { useKnownPasswords } from "../global";
+import { useAuthInfo } from "../hooks";
 
 type Props = StackScreenProps<RootStackParamList, "Home">;
 
@@ -14,7 +15,7 @@ export default function Home({ navigation }: Props) {
   let [data, setData] = useState<Conference[] | null>(null);
   let [refreshing, setRefreshing] = useState(false);
   let [knownPasswords, _setKnownPasswords] = useKnownPasswords();
-  let [user, _setUser] = useUser();
+  let [user, _admin] = useAuthInfo();
 
   async function refreshData() {
     if (refreshing) {
@@ -33,7 +34,9 @@ export default function Home({ navigation }: Props) {
     refreshData();
   }
 
-  useEffect(() => {refreshData();}, [user]);
+  useEffect(() => {
+    refreshData();
+  }, [user]);
 
   return (
     <FlatList

@@ -8,7 +8,11 @@ interface MModalActionsProps {
   submitTitle: string;
 }
 
-export function MModalActions({onClose, onSubmit, submitTitle}: MModalActionsProps) {
+export function MModalActions({
+  onClose,
+  onSubmit,
+  submitTitle,
+}: MModalActionsProps) {
   return (
     <View
       style={{
