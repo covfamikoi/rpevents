@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
-import { List, Text } from "react-native-paper";
-import PublicConference from "../models/public_conference";
+import { List } from "react-native-paper";
 import { StackScreenProps } from "@react-navigation/stack";
+
+import PublicConference from "../models/public_conference";
 import { RootStackParamList } from "../../App";
-import { View } from "react-native";
 
 type Props = StackScreenProps<RootStackParamList, "Home">;
 
 export default function Home({ navigation }: Props) {
   let [data, setData] = useState<Array<PublicConference> | undefined>(
-    undefined,
+    undefined
   );
   let [refreshing, setRefreshing] = useState(false);
 

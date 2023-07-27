@@ -1,3 +1,5 @@
+import {} from "./firebaseConfig";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
@@ -7,16 +9,17 @@ import {
   PaperProvider,
   adaptNavigationTheme,
 } from "react-native-paper";
-import Home from "./app/pages/Home";
-import CustomAppBar from "./app/components/CustomAppBar";
-import Conference from "./app/pages/conference/Conference";
-import PublicConference from "./app/models/public_conference";
 import { useColorScheme } from "react-native";
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
+
+import Home from "./app/pages/Home";
+import CustomAppBar from "./app/components/CustomAppBar";
+import Conference from "./app/pages/conference/Conference";
+import PublicConference from "./app/models/public_conference";
 
 export type RootStackParamList = {
   Home: undefined;
