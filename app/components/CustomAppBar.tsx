@@ -18,7 +18,7 @@ export default function CustomAppBar(props: StackHeaderProps) {
         <Appbar.BackAction onPress={props.navigation.goBack} />
       ) : null}
       <Appbar.Content title={title} />
-      {user === null ? (
+      {user === null || true ? (
         <View>
           <Appbar.Action icon="account" onPress={() => setAdminPopup(true)} />
           <AuthPopup

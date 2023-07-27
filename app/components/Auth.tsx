@@ -1,23 +1,15 @@
 import { useState } from "react";
 import { View } from "react-native";
-import {
-  TextInput,
-  IconButton,
-  Modal,
-  Portal,
-  Text,
-  Title,
-  withTheme,
-  Button,
-  MD3Theme,
-} from "react-native-paper";
+import { Portal, Text, withTheme, MD3Theme } from "react-native-paper";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
 
-import TabButton from "./TabButton";
+import { Tabs, TabButton } from "./Tabs";
 import { fireAuth } from "../firebaseConfig";
+import { MModal, MModalActions, MModalHeader } from "./MModal";
+import { EmailTextInput, PasswordTextInput } from "./Inputs";
 
 interface Props {
   visible: boolean;
@@ -49,39 +41,40 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
       .catch((err) => setError(err.code));
   }
 
+  const errEmail = [
+    "auth/invalid-email",
+    "auth/missing-email",
+    "auth/user-not-found",
+  ].includes(error);
+  const errPassword = ["auth/missing-password", "auth/wrong-password"].includes(
+    error
+  );
+
   return (
     <View>
-      <TextInput
-        mode="outlined"
+      <EmailTextInput
         label="Email"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="email-address"
         value={email}
         onChangeText={(v) => {
           setEmail(v);
           setError("");
         }}
+        error={errEmail}
       />
-      {[
-        "auth/invalid-email",
-        "auth/missing-email",
-        "auth/user-not-found",
-      ].includes(error) ? (
+      {errEmail ? (
         <Text style={{ color: theme.colors.error }}>Invalid Email</Text>
       ) : null}
-      <TextInput
+      <PasswordTextInput
         style={{ marginTop: 5 }}
-        mode="outlined"
         label="Password"
-        secureTextEntry={true}
         value={password}
         onChangeText={(v) => {
           setPassword(v);
           setError("");
         }}
+        error={errPassword}
       />
-      {["auth/missing-password", "auth/wrong-password"].includes(error) ? (
+      {errPassword ? (
         <Text style={{ color: theme.colors.error }}>Invalid Password</Text>
       ) : null}
       <Text
@@ -91,21 +84,11 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
         Forgot Password
       </Text>
 
-      <View
-        style={{
-          marginVertical: 20,
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Button onPress={onClose} style={{ marginRight: 10 }}>
-          Cancel
-        </Button>
-        <Button onPress={signIn} mode="contained">
-          Sign In
-        </Button>
-      </View>
+      <MModalActions
+        onClose={onClose}
+        onSubmit={signIn}
+        submitTitle="Sign In"
+      />
     </View>
   );
 }
@@ -117,47 +100,29 @@ function SignupScreen({ onClose }: ScreenProps) {
 
   return (
     <View>
-      <TextInput
-        mode="outlined"
+      <EmailTextInput
         label="Enter your email"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
       />
-      <TextInput
+      <PasswordTextInput
         style={{ marginTop: 5 }}
-        mode="outlined"
         label="Choose a password"
-        secureTextEntry={true}
         value={password}
         onChangeText={setPassword}
       />
-      <TextInput
+      <PasswordTextInput
         style={{ marginTop: 5 }}
-        mode="outlined"
         label="Re-enter your password"
-        secureTextEntry={true}
         value={password2}
         onChangeText={setPassword2}
       />
 
-      <View
-        style={{
-          marginVertical: 20,
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Button onPress={onClose} style={{ marginRight: 10 }}>
-          Cancel
-        </Button>
-        <Button onPress={() => alert()} mode="contained">
-          Sign Up
-        </Button>
-      </View>
+      <MModalActions
+        onClose={onClose}
+        onSubmit={() => alert()}
+        submitTitle="Sign Up"
+      />
     </View>
   );
 }
@@ -172,46 +137,36 @@ function ResetScreen({ onClose, theme, setTab }: ScreenProps) {
     }
 
     sendPasswordResetEmail(fireAuth, email)
-      .then((ret) => setTab("Sign In"))
+      .then((_) => setTab("Sign In"))
       .catch((err) => setError(err.code));
   }
 
+  const errEmail = [
+    "auth/invalid-email",
+    "auth/missing-email",
+    "auth/user-not-found",
+  ].includes(error);
+
   return (
     <View>
-      <TextInput
-        mode="outlined"
+      <EmailTextInput
         label="Enter your email"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="email-address"
         value={email}
         onChangeText={(v) => {
           setEmail(v);
           setError("");
         }}
+        error={errEmail}
       />
-      {[
-        "auth/invalid-email",
-        "auth/missing-email",
-        "auth/user-not-found",
-      ].includes(error) ? (
+      {errEmail ? (
         <Text style={{ color: theme.colors.error }}>Invalid Email</Text>
       ) : null}
-      <View
-        style={{
-          marginVertical: 20,
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Button onPress={onClose} style={{ marginRight: 10 }}>
-          Cancel
-        </Button>
-        <Button onPress={resetPassword} mode="contained">
-          Send Email
-        </Button>
-      </View>
+
+      <MModalActions
+        onClose={onClose}
+        onSubmit={resetPassword}
+        submitTitle="Send Email"
+      />
     </View>
   );
 }
@@ -221,41 +176,17 @@ function AuthPopup({ visible, onClose, theme }: Props) {
 
   return (
     <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onClose}
-        contentContainerStyle={{
-          backgroundColor: theme.colors.background,
-          margin: 20,
-          borderRadius: 20,
-          padding: 0,
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Title style={{ paddingLeft: 20 }}>{tab}</Title>
-          <View style={{ flex: 1 }}></View>
-          <IconButton icon="close" onPress={onClose} />
-        </View>
+      <MModal visible={visible} onClose={onClose}>
+        <MModalHeader title={tab} onClose={onClose} />
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 10,
-          }}
-        >
+        <Tabs>
           <TabButton value="Sign In" tab={tab} setTab={setTab}>
             Sign In
           </TabButton>
           <TabButton value="Sign Up" tab={tab} setTab={setTab}>
             Sign Up
           </TabButton>
-        </View>
+        </Tabs>
 
         <View style={{ marginHorizontal: 20 }}>
           {(function () {
@@ -287,7 +218,7 @@ function AuthPopup({ visible, onClose, theme }: Props) {
             }
           })()}
         </View>
-      </Modal>
+      </MModal>
     </Portal>
   );
 }
