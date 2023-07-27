@@ -67,6 +67,7 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
       <PasswordTextInput
         style={{ marginTop: 5 }}
         label="Password"
+        autoComplete="current-password"
         value={password}
         onChangeText={(v) => {
           setPassword(v);
@@ -108,12 +109,14 @@ function SignupScreen({ onClose }: ScreenProps) {
       <PasswordTextInput
         style={{ marginTop: 5 }}
         label="Choose a password"
+        autoComplete="new-password"
         value={password}
         onChangeText={setPassword}
       />
       <PasswordTextInput
         style={{ marginTop: 5 }}
         label="Re-enter your password"
+        autoComplete="new-password"
         value={password2}
         onChangeText={setPassword2}
       />
