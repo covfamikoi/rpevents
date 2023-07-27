@@ -72,9 +72,7 @@ function JoinConference({ onClose, navigation }: ScreenProps) {
         }}
         autoFocus={true}
       />
-      {error === null ? null : (
-        <HelperText type="error">{error}</HelperText>
-      )}
+      {error === null ? null : <HelperText type="error">{error}</HelperText>}
       <MModalActions onClose={onClose} onSubmit={submit} submitTitle="Join" />
     </View>
   );

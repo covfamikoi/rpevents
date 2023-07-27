@@ -53,7 +53,7 @@ function SigninScreen({ setTab, theme, onClose }: ScreenProps) {
     "auth/user-not-found",
   ].includes(error);
   const errPassword = ["auth/missing-password", "auth/wrong-password"].includes(
-    error
+    error,
   );
 
   return (
@@ -168,9 +168,7 @@ function ResetScreen({ onClose, theme, setTab }: ScreenProps) {
         }}
         error={errEmail}
       />
-      {errEmail ? (
-        <HelperText type="error">Invalid Email</HelperText>
-      ) : null}
+      {errEmail ? <HelperText type="error">Invalid Email</HelperText> : null}
 
       <MModalActions
         onClose={onClose}
