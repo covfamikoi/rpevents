@@ -1,10 +1,15 @@
 import { RootStackParamList } from "..";
 
+import { sendPasswordResetEmail, signOut } from "firebase/auth";
+import { useEffect } from "react";
 import { ScrollView, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Button, List, Text, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+import { fireAuth } from "../../firebaseConfig";
+import { useAdmin, useUser } from "../../hooks";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Account">;
 
@@ -39,12 +44,42 @@ function EmailVerification({ visible }: { visible: boolean }) {
 }
 
 export default function Account({ navigation }: Props) {
+  const user = useUser();
+
+  useEffect(() => {
+    if (user === null && navigation.isFocused()) {
+      navigation.replace("Authentication");
+    }
+  }, [user]);
+
+  function logout() {
+    signOut(fireAuth).then(() => navigation.goBack());
+  }
+
+  function changePassword() {
+    sendPasswordResetEmail(fireAuth, user!.email!)
+      .then(() => alert("Password reset email sent."))
+      .catch((_err) => alert("Something went wrong."));
+  }
+
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View style={{ flex: 1, alignItems: "center" }}>
-        {/* <Title>Signed in as {user?.email}</Title> */}
-        <EmailVerification visible={true} />
-      </View>
-    </ScrollView>
+    <View style={{ alignItems: "center", flex: 1 }}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View style={{ alignItems: "center" }}>
+          <EmailVerification visible={true} />
+        </View>
+
+        <List.Section>
+          <List.Subheader>Account</List.Subheader>
+          <Button mode="contained-tonal" onPress={logout}>
+            Logout
+          </Button>
+          <View style={{ marginVertical: 5 }} />
+          <Button mode="contained-tonal" onPress={changePassword}>
+            Change Password
+          </Button>
+        </List.Section>
+      </ScrollView>
+    </View>
   );
 }
