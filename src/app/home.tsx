@@ -1,7 +1,7 @@
 import { RootStackParamList } from ".";
 
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList } from "react-native";
 import { List, useTheme } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -86,9 +86,8 @@ export default function Home({ navigation }: Props) {
     <FlatList
       contentInsetAdjustmentBehavior="automatic"
       data={listItems}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={refreshData} />
-      }
+      refreshing={refreshing}
+      onRefresh={refreshData}
       renderItem={(item) => item.item}
     />
   );
