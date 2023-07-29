@@ -1,7 +1,7 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, HelperText } from "react-native-paper";
 
 import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
 import { ParamListBase } from "@react-navigation/native";
@@ -31,6 +31,25 @@ export default function Signin({ navigation }: Props) {
     setPasswordErr("");
     setPassword(text);
   };
+
+  function forgotPassword() {
+    setPasswordErr("");
+    if (email == "") {
+      return setEmailErr("Please enter your email.");
+    }
+
+    sendPasswordResetEmail(fireAuth, email)
+    .then(() => alert("Password reset email sent."))
+    .catch((err) => {
+      switch (err.code) {
+        case "auth/user-not-found":
+        case "auth/invalid-email":
+          return setEmailErr("Incorrect email.");
+        default:
+          alert(`An unexpected error occured: ${err.code}`);
+      }
+    });
+  }
 
   function submit() {
     let ret = false;
@@ -78,6 +97,7 @@ export default function Signin({ navigation }: Props) {
       <HiddenHelperText type="error" visible={passwordErrVisible}>
         {passwordErr}
       </HiddenHelperText>
+      <HelperText visible={true} type="info" onPress={forgotPassword}>Forgot password</HelperText>
       <Button mode="contained" style={{ marginTop: 10 }} onPress={submit}>
         Submit
       </Button>
