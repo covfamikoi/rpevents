@@ -33,11 +33,14 @@ import NewConference from "./new";
 
 import { Conference } from "../models";
 import { useMemo } from "react";
+import Account from "./account";
+import { useAdmin, useUser } from "../hooks";
 
 export type RootStackParamList = {
   Home: undefined;
   NewConference: undefined;
   Authentication: undefined;
+  Account: undefined;
   ViewConference: { conference: Conference };
   ViewConferenceAnnouncements: { conference: Conference };
   ViewConferenceCalendar: { conference: Conference };
@@ -52,7 +55,7 @@ type Props<name extends keyof RootStackParamList> = {
 };
 
 function withAccountButton<name extends keyof RootStackParamList>(
-  options: ({ route, navigation }: Props<name>) => NativeStackNavigationOptions,
+  signedIn: boolean, options: ({ route, navigation }: Props<name>) => NativeStackNavigationOptions,
 ): (props: Props<name>) => NativeStackNavigationOptions {
   return ({ route, navigation }: Props<name>) => {
     return {
@@ -61,7 +64,7 @@ function withAccountButton<name extends keyof RootStackParamList>(
         headerRight: (_props) => (
           <IconButton
             icon="account"
-            onPress={() => navigation.navigate("Authentication")}
+            onPress={() => navigation.navigate(signedIn ? "Account" : "Authentication")}
           />
         ),
       },
@@ -89,6 +92,8 @@ export default function Index() {
     return colorScheme === "dark" ? DarkTheme : LightTheme;
   }, [colorScheme]);
 
+  const user = useUser();
+  const signedIn = user !== null;
 
   return (
     <PaperProvider theme={paperTheme}>
@@ -103,7 +108,7 @@ export default function Index() {
           <Stack.Screen
             component={Home}
             name="Home"
-            options={withAccountButton(() => ({
+            options={withAccountButton(signedIn, () => ({
               title: "Conferences",
               headerLargeTitle: true,
             }))}
@@ -111,7 +116,7 @@ export default function Index() {
           <Stack.Screen
             component={ViewConference}
             name="ViewConference"
-            options={withAccountButton(({ route }) => ({
+            options={withAccountButton(signedIn, ({ route }) => ({
               title: route.params.conference.title,
               headerLargeTitle: true,
             }))}
@@ -119,22 +124,22 @@ export default function Index() {
           <Stack.Screen
             component={ViewConferenceAnnouncements}
             name="ViewConferenceAnnouncements"
-            options={withAccountButton(() => ({ title: "Announcements" }))}
+            options={withAccountButton(signedIn, () => ({ title: "Announcements" }))}
           />
           <Stack.Screen
             component={ViewConferenceCalendar}
             name="ViewConferenceCalendar"
-            options={withAccountButton(() => ({ title: "Calendar" }))}
+            options={withAccountButton(signedIn, () => ({ title: "Calendar" }))}
           />
           <Stack.Screen
             component={ViewConferenceMap}
             name="ViewConferenceMap"
-            options={withAccountButton(() => ({ title: "Map" }))}
+            options={withAccountButton(signedIn, () => ({ title: "Map" }))}
           />
           <Stack.Screen
             component={NewConference}
             name="NewConference"
-            options={withAccountButton(() => ({
+            options={withAccountButton(signedIn, () => ({
               presentation: "modal",
               title: "Add Conference",
             }))}
@@ -143,6 +148,11 @@ export default function Index() {
             component={Authentication}
             name="Authentication"
             options={{ presentation: "modal", title: "Account" }}
+          />
+          <Stack.Screen
+            component={Account}
+            name="Account"
+            options={{ presentation: "modal", title: user?.email! }}
           />
         </Stack.Navigator>
       </NavigationContainer>

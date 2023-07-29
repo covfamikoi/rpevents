@@ -8,8 +8,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { getConferences } from "../database";
 import { useKnownKeys } from "../global";
-import { useAuthInfo } from "../hooks";
 import { Conference } from "../models";
+import { useUser } from "../hooks";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -20,7 +20,7 @@ export default function Home({ navigation }: Props) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [knownKeys, _setKnownKeys] = useKnownKeys();
-  const [user, _admin] = useAuthInfo();
+  const user = useUser();
 
   const listItems = useMemo(() => {
     let items = [
