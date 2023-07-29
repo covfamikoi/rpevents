@@ -32,6 +32,7 @@ import Home from "./home";
 import NewConference from "./new";
 
 import { Conference } from "../models";
+import { useMemo } from "react";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -72,18 +73,22 @@ export default function Index() {
   const colorScheme = useColorScheme();
   const { theme } = useMaterial3Theme();
 
-  const paperTheme =
-    colorScheme === "dark"
+  const paperTheme = useMemo(() => {
+    return colorScheme === "dark"
       ? { ...MD3DarkTheme, colors: theme.dark }
       : { ...MD3LightTheme, colors: theme.light };
+  }, [colorScheme, theme]);
 
-  const { LightTheme, DarkTheme } = adaptNavigationTheme({
-    reactNavigationLight: NavigationDefaultTheme,
-    reactNavigationDark: NavigationDarkTheme,
-    materialLight: MD3LightTheme,
-    materialDark: MD3DarkTheme,
-  });
-  const navigationTheme = colorScheme === "dark" ? DarkTheme : LightTheme;
+  const navigationTheme = useMemo(() => {
+    const { LightTheme, DarkTheme } = adaptNavigationTheme({
+      reactNavigationLight: NavigationDefaultTheme,
+      reactNavigationDark: NavigationDarkTheme,
+      materialLight: MD3LightTheme,
+      materialDark: MD3DarkTheme,
+    });
+    return colorScheme === "dark" ? DarkTheme : LightTheme;
+  }, [colorScheme]);
+
 
   return (
     <PaperProvider theme={paperTheme}>
