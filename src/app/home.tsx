@@ -1,27 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
-import { FlatList, RefreshControl } from "react-native-gesture-handler";
+import { RootStackParamList } from ".";
+
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { FlatList, RefreshControl } from "react-native";
 import { List, useTheme } from "react-native-paper";
 
-import { StackScreenProps } from "@react-navigation/stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { RootStackParamList } from "../App";
-import AddConference from "../components/AddConference";
 import { getConferences } from "../database";
-import { useKnownPasswords } from "../global";
+import { useKnownKeys } from "../global";
 import { useAuthInfo } from "../hooks";
 import { Conference } from "../models";
 
-type Props = StackScreenProps<RootStackParamList, "Home">;
+type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function Home({ navigation }: Props) {
   const theme = useTheme();
 
   const [data, setData] = useState<Conference[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [addConf, setAddConf] = useState(false);
 
-  const [knownPasswords, _setKnownPasswords] = useKnownPasswords();
+  const [knownKeys, _setKnownKeys] = useKnownKeys();
   const [user, _admin] = useAuthInfo();
 
   const listItems = useMemo(() => {
@@ -29,7 +27,7 @@ export default function Home({ navigation }: Props) {
       <List.Item
         titleStyle={{ color: theme.colors.primary }}
         title="Add Conference"
-        onPress={() => setAddConf(true)}
+        onPress={() => navigation.navigate("NewConference")}
         left={({ style }) => (
           <List.Icon icon="plus" color={theme.colors.primary} style={style} />
         )}
@@ -40,9 +38,9 @@ export default function Home({ navigation }: Props) {
         return (
           <List.Item
             title={item.title}
-            onPress={() => {
-              navigation.navigate("Conference", { conference: item });
-            }}
+            onPress={() =>
+              navigation.navigate("ViewConference", { conference: item })
+            }
           />
         );
       }),
@@ -65,7 +63,7 @@ export default function Home({ navigation }: Props) {
           await user.getIdToken(true);
         }
       }
-      const conferences = await getConferences(user, knownPasswords);
+      const conferences = await getConferences(user, knownKeys);
       setData(conferences);
     } finally {
       setRefreshing(false);
@@ -74,23 +72,24 @@ export default function Home({ navigation }: Props) {
 
   useEffect(() => {
     refreshData();
-  }, [user, knownPasswords]);
+  }, [user, knownKeys]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerSearchBarOptions: {
+        // search bar options
+      },
+    });
+  }, [navigation]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <AddConference
-        navigation={navigation}
-        visible={addConf}
-        onClose={() => setAddConf(false)}
-      />
-
-      <FlatList
-        data={listItems}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={refreshData} />
-        }
-        renderItem={(item) => item.item}
-      />
-    </View>
+    <FlatList
+      contentInsetAdjustmentBehavior="automatic"
+      data={listItems}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={refreshData} />
+      }
+      renderItem={(item) => item.item}
+    />
   );
 }
