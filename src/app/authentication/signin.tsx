@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 import { EmailTextInput, HiddenHelperText, PasswordTextInput } from "../../components";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { fireAuth, fireDb } from "../../firebaseConfig";
+import { fireAuth } from "../../firebaseConfig";
 import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
 import { ParamListBase } from "@react-navigation/native";
 

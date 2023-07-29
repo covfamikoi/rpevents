@@ -1,11 +1,9 @@
 import { RootStackParamList } from "..";
 
-import { KeyboardAvoidingView, ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import { Text } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
-import { ConfKeyTextInput } from "../../components";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
