@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { useMemo } from "react";
 import { Platform, useColorScheme } from "react-native";
 import {
   IconButton,
@@ -23,6 +24,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
+import Account from "./account";
 import Authentication from "./authentication";
 import ViewConference from "./conference";
 import ViewConferenceAnnouncements from "./conference/announcements";
@@ -31,10 +33,8 @@ import ViewConferenceMap from "./conference/map";
 import Home from "./home";
 import NewConference from "./new";
 
-import { Conference } from "../models";
-import { useMemo } from "react";
-import Account from "./account";
 import { useAdmin, useUser } from "../hooks";
+import { Conference } from "../models";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -55,7 +55,8 @@ type Props<name extends keyof RootStackParamList> = {
 };
 
 function withAccountButton<name extends keyof RootStackParamList>(
-  signedIn: boolean, options: ({ route, navigation }: Props<name>) => NativeStackNavigationOptions,
+  signedIn: boolean,
+  options: ({ route, navigation }: Props<name>) => NativeStackNavigationOptions,
 ): (props: Props<name>) => NativeStackNavigationOptions {
   return ({ route, navigation }: Props<name>) => {
     return {
@@ -64,7 +65,9 @@ function withAccountButton<name extends keyof RootStackParamList>(
         headerRight: (_props) => (
           <IconButton
             icon="account"
-            onPress={() => navigation.navigate(signedIn ? "Account" : "Authentication")}
+            onPress={() =>
+              navigation.navigate(signedIn ? "Account" : "Authentication")
+            }
           />
         ),
       },
@@ -124,7 +127,9 @@ export default function Index() {
           <Stack.Screen
             component={ViewConferenceAnnouncements}
             name="ViewConferenceAnnouncements"
-            options={withAccountButton(signedIn, () => ({ title: "Announcements" }))}
+            options={withAccountButton(signedIn, () => ({
+              title: "Announcements",
+            }))}
           />
           <Stack.Screen
             component={ViewConferenceCalendar}

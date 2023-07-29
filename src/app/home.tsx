@@ -8,8 +8,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { getConferences } from "../database";
 import { useKnownKeys } from "../global";
-import { Conference } from "../models";
 import { useUser } from "../hooks";
+import { Conference } from "../models";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 

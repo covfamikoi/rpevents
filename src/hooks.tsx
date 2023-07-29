@@ -3,19 +3,21 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 import { fireAuth, fireDb } from "./firebaseConfig";
-import { Admin } from "./models";
 import { useGlobalAdmin } from "./global";
+import { Admin } from "./models";
 
 export function useUser() {
   const [user, setUser] = useState(fireAuth.currentUser);
 
-  useEffect(() => onAuthStateChanged(fireAuth, (newUser) => {
-    if (newUser === user) {
-      return;
-    }
+  useEffect(() =>
+    onAuthStateChanged(fireAuth, (newUser) => {
+      if (newUser === user) {
+        return;
+      }
 
-    setUser(newUser);
-  }));
+      setUser(newUser);
+    }),
+  );
 
   return user;
 }
