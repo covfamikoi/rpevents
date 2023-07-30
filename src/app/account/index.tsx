@@ -1,19 +1,31 @@
 import { RootStackParamList } from "..";
 
-import { sendPasswordResetEmail, signOut } from "firebase/auth";
-import { useEffect } from "react";
+import {
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signOut,
+} from "firebase/auth";
+import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { AdminContext, UserContext } from "../../contexts";
 import { fireAuth } from "../../firebaseConfig";
-import { useAdmin, useUser } from "../../hooks";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Account">;
 
-function EmailVerification({ visible }: { visible: boolean }) {
+function EmailVerification({
+  visible,
+  verify,
+  refresh,
+}: {
+  visible: boolean;
+  verify: () => void;
+  refresh: () => void;
+}) {
   const theme = useTheme();
 
   if (!visible) {
@@ -31,11 +43,11 @@ function EmailVerification({ visible }: { visible: boolean }) {
         <Text style={{ color: theme.colors.error }}>Email unverified</Text>
       </View>
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ color: theme.colors.primary }} onPress={() => alert()}>
+        <Text style={{ color: theme.colors.primary }} onPress={verify}>
           Resend verification email
         </Text>
         <View style={{ marginHorizontal: 7 }} />
-        <Text style={{ color: theme.colors.primary }} onPress={() => alert()}>
+        <Text style={{ color: theme.colors.primary }} onPress={refresh}>
           I've verified my email
         </Text>
       </View>
@@ -44,16 +56,23 @@ function EmailVerification({ visible }: { visible: boolean }) {
 }
 
 export default function Account({ navigation }: Props) {
-  const user = useUser();
-
-  useEffect(() => {
-    if (user === null && navigation.isFocused()) {
-      navigation.replace("Authentication");
-    }
-  }, [user]);
+  const user = useContext(UserContext);
 
   function logout() {
     signOut(fireAuth).then(() => navigation.goBack());
+  }
+
+  function verify() {
+    sendEmailVerification(user!)
+      .then(() => alert("Verification email sent."))
+      .catch((err) => alert(`Something went wrong: ${err.code}`));
+  }
+
+  async function refresh() {
+    await user?.getIdToken(true);
+    await user?.reload();
+    await fireAuth.updateCurrentUser(null);
+    await fireAuth.updateCurrentUser(user);
   }
 
   function changePassword() {
@@ -66,7 +85,11 @@ export default function Account({ navigation }: Props) {
     <View style={{ alignItems: "center", flex: 1 }}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={{ alignItems: "center" }}>
-          <EmailVerification visible={true} />
+          <EmailVerification
+            visible={!user?.emailVerified}
+            verify={verify}
+            refresh={refresh}
+          />
         </View>
 
         <List.Section>

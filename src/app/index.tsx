@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import { useMemo } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useMemo, useState } from "react";
 import { Platform, useColorScheme } from "react-native";
 import {
   IconButton,
@@ -33,8 +35,9 @@ import ViewConferenceMap from "./conference/map";
 import Home from "./home";
 import NewConference from "./new";
 
-import { useUser } from "../hooks";
-import { Conference } from "../models";
+import { ContextProvider } from "../contexts";
+import { fireAuth, fireDb } from "../firebaseConfig";
+import { Admin, Conference } from "../models";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -95,72 +98,97 @@ export default function Index() {
     return colorScheme === "dark" ? DarkTheme : LightTheme;
   }, [colorScheme]);
 
-  const user = useUser();
+  const [user, setUser] = useState(fireAuth.currentUser);
+  const [admin, setAdmin] = useState<Admin | null>(null);
   const signedIn = user !== null;
 
+  useEffect(() =>
+    onAuthStateChanged(fireAuth, (newUser) => {
+      if (user !== newUser) {
+        setUser(newUser);
+      }
+    }),
+  );
+
+  useEffect(() => {
+    if (user === null || !user.emailVerified) {
+      setAdmin(null);
+    } else {
+      getDoc(doc(fireDb, "admins", user.email!)).then((document) => {
+        const data = document.data();
+        const admin = data === undefined ? null : (data as Admin);
+        setAdmin(admin);
+      });
+    }
+  }, [user === null || !user.emailVerified]);
+
   return (
-    <PaperProvider theme={paperTheme}>
-      <NavigationContainer theme={navigationTheme}>
-        <StatusBar style="auto" animated={true} />
-        <Stack.Navigator
-          screenOptions={{
-            headerTransparent: Platform.OS === "ios",
-            headerBlurEffect: "regular",
-          }}
-        >
-          <Stack.Screen
-            component={Home}
-            name="Home"
-            options={withAccountButton(signedIn, () => ({
-              title: "Conferences",
-              headerLargeTitle: true,
-            }))}
-          />
-          <Stack.Screen
-            component={ViewConference}
-            name="ViewConference"
-            options={withAccountButton(signedIn, ({ route }) => ({
-              title: route.params.conference.title,
-              headerLargeTitle: true,
-            }))}
-          />
-          <Stack.Screen
-            component={ViewConferenceAnnouncements}
-            name="ViewConferenceAnnouncements"
-            options={withAccountButton(signedIn, () => ({
-              title: "Announcements",
-            }))}
-          />
-          <Stack.Screen
-            component={ViewConferenceCalendar}
-            name="ViewConferenceCalendar"
-            options={withAccountButton(signedIn, () => ({ title: "Calendar" }))}
-          />
-          <Stack.Screen
-            component={ViewConferenceMap}
-            name="ViewConferenceMap"
-            options={withAccountButton(signedIn, () => ({ title: "Map" }))}
-          />
-          <Stack.Screen
-            component={NewConference}
-            name="NewConference"
-            options={withAccountButton(signedIn, () => ({
-              presentation: "modal",
-              title: "Add Conference",
-            }))}
-          />
-          <Stack.Screen
-            component={Authentication}
-            name="Authentication"
-            options={{ presentation: "modal", title: "Account" }}
-          />
-          <Stack.Screen
-            component={Account}
-            name="Account"
-            options={{ presentation: "modal", title: user?.email! }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <ContextProvider user={user} admin={admin}>
+      <PaperProvider theme={paperTheme}>
+        <NavigationContainer theme={navigationTheme}>
+          <StatusBar style="auto" animated={true} />
+          <Stack.Navigator
+            screenOptions={{
+              headerTransparent: Platform.OS === "ios",
+              headerBlurEffect: "regular",
+            }}
+          >
+            <Stack.Screen
+              component={Home}
+              name="Home"
+              options={withAccountButton(signedIn, () => ({
+                title: "Conferences",
+                headerLargeTitle: true,
+              }))}
+            />
+            <Stack.Screen
+              component={ViewConference}
+              name="ViewConference"
+              options={withAccountButton(signedIn, ({ route }) => ({
+                title: route.params.conference.title,
+                headerLargeTitle: true,
+              }))}
+            />
+            <Stack.Screen
+              component={ViewConferenceAnnouncements}
+              name="ViewConferenceAnnouncements"
+              options={withAccountButton(signedIn, () => ({
+                title: "Announcements",
+              }))}
+            />
+            <Stack.Screen
+              component={ViewConferenceCalendar}
+              name="ViewConferenceCalendar"
+              options={withAccountButton(signedIn, () => ({
+                title: "Calendar",
+              }))}
+            />
+            <Stack.Screen
+              component={ViewConferenceMap}
+              name="ViewConferenceMap"
+              options={withAccountButton(signedIn, () => ({ title: "Map" }))}
+            />
+            <Stack.Screen
+              component={NewConference}
+              name="NewConference"
+              options={withAccountButton(signedIn, () => ({
+                presentation: "modal",
+                title: "Add Conference",
+              }))}
+            />
+            <Stack.Screen
+              component={Authentication}
+              name="Authentication"
+              options={{ presentation: "modal", title: "Account" }}
+            />
+            <Stack.Screen
+              component={Account}
+              name="Account"
+              options={{ presentation: "modal", title: user?.email! }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </ContextProvider>
   );
 }

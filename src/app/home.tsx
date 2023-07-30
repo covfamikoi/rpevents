@@ -1,14 +1,20 @@
 import { RootStackParamList } from ".";
 
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { FlatList } from "react-native";
 import { List, useTheme } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { UserContext } from "../contexts";
 import { getConferences } from "../database";
 import { useKnownKeys } from "../global";
-import { useUser } from "../hooks";
 import { Conference } from "../models";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
@@ -20,7 +26,7 @@ export default function Home({ navigation }: Props) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [knownKeys, _setKnownKeys] = useKnownKeys();
-  const user = useUser();
+  const user = useContext(UserContext);
 
   const listItems = useMemo(() => {
     let items = [
