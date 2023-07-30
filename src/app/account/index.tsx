@@ -64,11 +64,8 @@ export default function Account({ navigation }: Props) {
   }
 
   async function refresh() {
-    // await user?.getIdToken(true);
-    // await user?.reload();
-    // auth().
-    // await fireAuth.updateCurrentUser(null);
-    // await fireAuth.updateCurrentUser(user);
+    await user?.getIdToken(true);
+    await user?.reload();
   }
 
   function changePassword() {
