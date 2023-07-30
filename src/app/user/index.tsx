@@ -7,6 +7,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Account from "./account";
 import Authentication from "./authentication";
 
+import { FocusAwareLightStatusBar } from "../../components";
 import { UserContext } from "../../contexts/auth";
 
 export type UserModalProps = NativeStackScreenProps<RootStackParamList, "User">;
@@ -22,9 +23,10 @@ export default function UserModal({ navigation }: UserModalProps) {
     }
   }, [user?.email]);
 
-  if (user === null) {
-    return <Authentication />;
-  } else {
-    return <Account user={user} />;
-  }
+  return (
+    <>
+      <FocusAwareLightStatusBar />
+      {user === null ? <Authentication /> : <Account user={user} />}
+    </>
+  );
 }
