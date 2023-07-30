@@ -1,16 +1,9 @@
-import { RootStackParamList } from "..";
-
-import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import auth from "@react-native-firebase/auth";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
-import { UserContext } from "../../contexts";
-
-type Props = NativeStackScreenProps<RootStackParamList, "Account">;
 
 function EmailVerification({
   visible,
@@ -50,13 +43,9 @@ function EmailVerification({
   );
 }
 
-export default function Account({ navigation }: Props) {
-  const user = useContext(UserContext);
-
+export default function Account({ user }: { user: FirebaseAuthTypes.User }) {
   function logout() {
-    auth()
-      .signOut()
-      .then(() => navigation.goBack());
+    auth().signOut();
   }
 
   function verify() {

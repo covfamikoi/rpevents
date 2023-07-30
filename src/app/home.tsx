@@ -12,7 +12,7 @@ import { List, useTheme } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { UserContext } from "../contexts";
+import { UserContext } from "../contexts/auth";
 import { getConferences } from "../database";
 import { useKnownKeys } from "../global";
 import { Conference } from "../models";
