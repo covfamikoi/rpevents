@@ -1,8 +1,8 @@
-import auth from "@react-native-firebase/auth";
 import { useState } from "react";
 import { View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 
+import auth from "@react-native-firebase/auth";
 import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
 import { ParamListBase } from "@react-navigation/native";
 
@@ -37,7 +37,8 @@ export default function Signin({ navigation }: Props) {
       return setEmailErr("Please enter your email.");
     }
 
-    auth().sendPasswordResetEmail(email)
+    auth()
+      .sendPasswordResetEmail(email)
       .then(() => alert("Password reset email sent."))
       .catch((err) => {
         switch (err.code) {
@@ -62,7 +63,8 @@ export default function Signin({ navigation }: Props) {
     }
     if (ret) return;
 
-    auth().signInWithEmailAndPassword(email, password)
+    auth()
+      .signInWithEmailAndPassword(email, password)
       .then((_user) => navigation.goBack())
       .catch((err) => {
         switch (err.code) {

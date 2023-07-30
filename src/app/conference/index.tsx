@@ -20,9 +20,10 @@ export default function ViewConference({ navigation, route }: Props) {
   async function refreshConference() {
     setRefreshing(true);
     try {
-      await conferenceCollection.doc(route.params.conference.key).get().then((value) =>
-        setConference(value.data()!),
-      );
+      await conferenceCollection
+        .doc(route.params.conference.key)
+        .get()
+        .then((value) => setConference(value.data()!));
     } finally {
       setRefreshing(false);
     }

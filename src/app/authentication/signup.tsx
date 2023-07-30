@@ -1,8 +1,8 @@
-import auth from "@react-native-firebase/auth";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "react-native-paper";
 
+import auth from "@react-native-firebase/auth";
 import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
 import { ParamListBase } from "@react-navigation/native";
 
@@ -62,7 +62,8 @@ export default function Signup({ navigation }: Props) {
     setEmailErr("");
     setPasswordErr("");
     setPassword2Err("");
-    auth().createUserWithEmailAndPassword(email, password)
+    auth()
+      .createUserWithEmailAndPassword(email, password)
       .then((user) => {
         user.user.sendEmailVerification().finally(() => {
           const parent = navigation.getParent()!;

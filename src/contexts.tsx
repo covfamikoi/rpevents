@@ -1,5 +1,6 @@
-import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import React, { createContext } from "react";
+
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 import { Admin } from "./models";
 

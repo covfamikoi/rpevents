@@ -1,11 +1,11 @@
 import { RootStackParamList } from "..";
 
-import auth from "@react-native-firebase/auth";
 import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
+import auth from "@react-native-firebase/auth";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { UserContext } from "../../contexts";
@@ -54,11 +54,14 @@ export default function Account({ navigation }: Props) {
   const user = useContext(UserContext);
 
   function logout() {
-    auth().signOut().then(() => navigation.goBack());
+    auth()
+      .signOut()
+      .then(() => navigation.goBack());
   }
 
   function verify() {
-    user!.sendEmailVerification()
+    user!
+      .sendEmailVerification()
       .then(() => alert("Verification email sent."))
       .catch((err) => alert(`Something went wrong: ${err.code}`));
   }
@@ -69,7 +72,8 @@ export default function Account({ navigation }: Props) {
   }
 
   function changePassword() {
-    auth().sendPasswordResetEmail(user!.email!)
+    auth()
+      .sendPasswordResetEmail(user!.email!)
       .then(() => alert("Password reset email sent."))
       .catch((_err) => alert("Something went wrong."));
   }
