@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "react-native-paper";
@@ -64,10 +67,12 @@ export default function Signup({ navigation }: Props) {
     setPasswordErr("");
     setPassword2Err("");
     createUserWithEmailAndPassword(fireAuth, email, password)
-      .then((_user) => {
-        const parent = navigation.getParent()!;
-        parent.goBack();
-        parent.navigate("Account");
+      .then((user) => {
+        sendEmailVerification(user.user).finally(() => {
+          const parent = navigation.getParent()!;
+          parent.goBack();
+          parent.navigate("Account");
+        });
       })
       .catch((err) => {
         switch (err.code) {
