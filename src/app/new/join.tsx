@@ -23,7 +23,9 @@ export default function JoinConference({ navigation }: Props) {
   };
 
   function submit() {
-    conferenceCollection.doc(keyInp).get()
+    conferenceCollection
+      .doc(keyInp)
+      .get()
       .then((conf) => {
         const data = conf.data();
         switch (data) {

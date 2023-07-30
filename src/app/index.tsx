@@ -8,9 +8,9 @@ import {
   PaperProvider,
   adaptNavigationTheme,
 } from "react-native-paper";
-import auth from "@react-native-firebase/auth";
 
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
+import auth from "@react-native-firebase/auth";
 import {
   NavigationContainer,
   NavigationProp,
@@ -35,8 +35,8 @@ import Home from "./home";
 import NewConference from "./new";
 
 import { ContextProvider } from "../contexts";
-import { Admin, Conference } from "../models";
 import { adminCollection } from "../database";
+import { Admin, Conference } from "../models";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -113,11 +113,14 @@ export default function Index() {
     if (user === null || !user.emailVerified) {
       setAdmin(null);
     } else {
-      adminCollection.doc(user.email!).get().then((document) => {
-        const data = document.data();
-        const admin = data === undefined ? null : data;
-        setAdmin(admin);
-      });
+      adminCollection
+        .doc(user.email!)
+        .get()
+        .then((document) => {
+          const data = document.data();
+          const admin = data === undefined ? null : data;
+          setAdmin(admin);
+        });
     }
   }, [user === null || !user.emailVerified]);
 
