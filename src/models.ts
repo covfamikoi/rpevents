@@ -16,7 +16,7 @@ export interface Location {
 
 export interface Event {
   name: string;
-  description: string;
+  info: string;
 
   location: number;
 
@@ -26,6 +26,7 @@ export interface Event {
 
 export interface Conference {
   title: string;
+  key: string;
 
   start: any;
   end: any;
@@ -34,7 +35,7 @@ export interface Conference {
   tileWidth: number;
   tileHeight: number;
 
-  admins: string[];
+  managers: string[];
   announcements: Announcement[];
   locations: Location[];
   events: Event[];

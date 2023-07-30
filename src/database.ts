@@ -11,7 +11,13 @@ import {
 import { fireDb } from "./firebaseConfig";
 import { Conference } from "./models";
 
-export async function getConferences(user: User | null, passwords: string[]) {
+export async function getConference(key: string) {
+  return await getDoc(doc(fireDb, "conferences", key)).then(
+    (conf) => conf.data() as Conference | undefined,
+  );
+}
+
+export async function getConferences(user: User | null, keys: string[]) {
   let ids: string[] = [];
   let conferences: Conference[] = [];
   if (user !== null && user.emailVerified) {
@@ -19,7 +25,7 @@ export async function getConferences(user: User | null, passwords: string[]) {
       await getDocs(
         query(
           collection(fireDb, "conferences"),
-          where("admins", "array-contains", user.email!),
+          where("managers", "array-contains", user.email!),
         ),
       )
     ).forEach((conf) => {
@@ -29,10 +35,10 @@ export async function getConferences(user: User | null, passwords: string[]) {
   }
 
   let thing = await Promise.all(
-    passwords
-      .filter((pwd) => !ids.includes(pwd))
-      .map(async (pwd) => {
-        return getDoc(doc(fireDb, "conferences", pwd)).then((conf) => {
+    keys
+      .filter((key) => !ids.includes(key))
+      .map(async (key) => {
+        return getDoc(doc(fireDb, "conferences", key)).then((conf) => {
           return conf.data()! as Conference;
         });
       }),

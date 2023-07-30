@@ -1,5 +1,5 @@
-import App from "./app/App";
+import Index from "./src/app";
 
-export default function Main() {
-  return <App />;
+export default function App() {
+  return <Index />;
 }
