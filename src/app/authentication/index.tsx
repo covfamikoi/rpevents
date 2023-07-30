@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -16,12 +16,11 @@ export default function Authentication() {
   return (
     <>
       <FocusAwareLightStatusBar />
-      <View style={{ height: height }} />
       <TabControl.Navigator
         screenOptions={{
           tabBarStyle: { backgroundColor: "transparent" },
         }}
-        style={{ flexGrow: 1 }}
+        style={{ flexGrow: 1, marginTop: Platform.OS === "ios" ? height : 0 }}
       >
         <TabControl.Screen component={Signin} name="Sign In" />
         <TabControl.Screen component={Signup} name="Sign Up" />
