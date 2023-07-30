@@ -84,7 +84,10 @@ export default function Signup({ navigation }: Props) {
   }
 
   return (
-    <KeyboardAwareScrollView style={{ margin: 10 }} keyboardShouldPersistTaps="always">
+    <KeyboardAwareScrollView
+      style={{ margin: 10 }}
+      keyboardShouldPersistTaps="always"
+    >
       <EmailTextInput
         label="Enter your email"
         error={emailErrVisible}
