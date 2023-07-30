@@ -33,7 +33,7 @@ import ViewConferenceMap from "./conference/map";
 import Home from "./home";
 import NewConference from "./new";
 
-import { useAdmin, useUser } from "../hooks";
+import { useUser } from "../hooks";
 import { Conference } from "../models";
 
 export type RootStackParamList = {
