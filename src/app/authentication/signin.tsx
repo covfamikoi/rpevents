@@ -1,7 +1,4 @@
-import {
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 import { useState } from "react";
 import { View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
@@ -14,7 +11,6 @@ import {
   HiddenHelperText,
   PasswordTextInput,
 } from "../../components";
-import { fireAuth } from "../../firebaseConfig";
 
 type Props = MaterialTopTabScreenProps<ParamListBase>;
 
@@ -41,7 +37,7 @@ export default function Signin({ navigation }: Props) {
       return setEmailErr("Please enter your email.");
     }
 
-    sendPasswordResetEmail(fireAuth, email)
+    auth().sendPasswordResetEmail(email)
       .then(() => alert("Password reset email sent."))
       .catch((err) => {
         switch (err.code) {
@@ -66,7 +62,7 @@ export default function Signin({ navigation }: Props) {
     }
     if (ret) return;
 
-    signInWithEmailAndPassword(fireAuth, email, password)
+    auth().signInWithEmailAndPassword(email, password)
       .then((_user) => navigation.goBack())
       .catch((err) => {
         switch (err.code) {

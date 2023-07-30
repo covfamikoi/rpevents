@@ -1,10 +1,6 @@
 import { RootStackParamList } from "..";
 
-import {
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  signOut,
-} from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
@@ -12,8 +8,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { AdminContext, UserContext } from "../../contexts";
-import { fireAuth } from "../../firebaseConfig";
+import { UserContext } from "../../contexts";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Account">;
 
@@ -59,24 +54,25 @@ export default function Account({ navigation }: Props) {
   const user = useContext(UserContext);
 
   function logout() {
-    signOut(fireAuth).then(() => navigation.goBack());
+    auth().signOut().then(() => navigation.goBack());
   }
 
   function verify() {
-    sendEmailVerification(user!)
+    user!.sendEmailVerification()
       .then(() => alert("Verification email sent."))
       .catch((err) => alert(`Something went wrong: ${err.code}`));
   }
 
   async function refresh() {
-    await user?.getIdToken(true);
-    await user?.reload();
-    await fireAuth.updateCurrentUser(null);
-    await fireAuth.updateCurrentUser(user);
+    // await user?.getIdToken(true);
+    // await user?.reload();
+    // auth().
+    // await fireAuth.updateCurrentUser(null);
+    // await fireAuth.updateCurrentUser(user);
   }
 
   function changePassword() {
-    sendPasswordResetEmail(fireAuth, user!.email!)
+    auth().sendPasswordResetEmail(user!.email!)
       .then(() => alert("Password reset email sent."))
       .catch((_err) => alert("Something went wrong."));
   }

@@ -1,14 +1,13 @@
-import { User } from "firebase/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import React, { createContext } from "react";
 
-import { fireAuth } from "./firebaseConfig";
 import { Admin } from "./models";
 
-export const UserContext = createContext(fireAuth.currentUser);
+export const UserContext = createContext(auth().currentUser);
 export const AdminContext = createContext<Admin | null>(null);
 
 type Props = {
-  user: User | null;
+  user: FirebaseAuthTypes.User | null;
   admin: Admin | null;
   children: React.ReactNode;
 };
