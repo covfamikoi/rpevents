@@ -1,4 +1,4 @@
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -6,7 +6,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Signin from "./signin";
 import Signup from "./signup";
 
-import { FocusAwareLightStatusBar } from "../../components";
+import { FocusAwareLightStatusBar } from "../../../components";
 
 const TabControl = createMaterialTopTabNavigator();
 

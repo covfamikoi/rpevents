@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { View } from "react-native";
 import { Button } from "react-native-paper";
 
@@ -7,13 +7,13 @@ import { ParamListBase } from "@react-navigation/native";
 
 import { ConfKeyTextInput } from "../../components";
 import HiddenHelperText from "../../components/HiddenHelperText";
+import { KeysContext } from "../../contexts/keys";
 import { conferenceCollection } from "../../database";
-import { useKnownKeys } from "../../global";
 
 type Props = MaterialTopTabScreenProps<ParamListBase>;
 
 export default function JoinConference({ navigation }: Props) {
-  const [keys, setKeys] = useKnownKeys();
+  const { addKey } = useContext(KeysContext);
   const [err, setErr] = useState("");
 
   const [keyInp, _setKeyInp] = useState("");
@@ -32,9 +32,7 @@ export default function JoinConference({ navigation }: Props) {
           case undefined:
             return setErr("missing");
           default:
-            if (!keys.includes(keyInp)) {
-              setKeys(keys.concat(keyInp));
-            }
+            addKey(keyInp);
             navigation.goBack();
             navigation.navigate("ViewConference", { conference: data });
         }

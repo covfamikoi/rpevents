@@ -3,18 +3,14 @@ import { View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 
 import auth from "@react-native-firebase/auth";
-import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
-import { ParamListBase } from "@react-navigation/native";
 
 import {
   EmailTextInput,
   HiddenHelperText,
   PasswordTextInput,
-} from "../../components";
+} from "../../../components";
 
-type Props = MaterialTopTabScreenProps<ParamListBase>;
-
-export default function Signin({ navigation }: Props) {
+export default function Signin() {
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const emailErrVisible = emailErr !== "";
@@ -65,7 +61,6 @@ export default function Signin({ navigation }: Props) {
 
     auth()
       .signInWithEmailAndPassword(email, password)
-      .then((_user) => navigation.goBack())
       .catch((err) => {
         switch (err.code) {
           case "auth/user-not-found":

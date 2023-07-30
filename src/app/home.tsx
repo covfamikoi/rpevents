@@ -12,9 +12,9 @@ import { List, useTheme } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { UserContext } from "../contexts";
+import { UserContext } from "../contexts/auth";
+import { KeysContext } from "../contexts/keys";
 import { getConferences } from "../database";
-import { useKnownKeys } from "../global";
 import { Conference } from "../models";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
@@ -25,7 +25,7 @@ export default function Home({ navigation }: Props) {
   const [data, setData] = useState<Conference[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [knownKeys, _setKnownKeys] = useKnownKeys();
+  const { keys } = useContext(KeysContext);
   const user = useContext(UserContext);
 
   const listItems = useMemo(() => {
@@ -60,7 +60,7 @@ export default function Home({ navigation }: Props) {
     }
     setRefreshing(true);
     try {
-      const conferences = await getConferences(user, knownKeys);
+      const conferences = await getConferences(user, keys);
       setData(conferences);
     } finally {
       setRefreshing(false);
@@ -69,7 +69,7 @@ export default function Home({ navigation }: Props) {
 
   useEffect(() => {
     refreshData();
-  }, [user, knownKeys]);
+  }, [user, keys]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

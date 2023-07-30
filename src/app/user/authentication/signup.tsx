@@ -3,18 +3,14 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button } from "react-native-paper";
 
 import auth from "@react-native-firebase/auth";
-import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
-import { ParamListBase } from "@react-navigation/native";
 
 import {
   EmailTextInput,
   HiddenHelperText,
   PasswordTextInput,
-} from "../../components";
+} from "../../../components";
 
-type Props = MaterialTopTabScreenProps<ParamListBase>;
-
-export default function Signup({ navigation }: Props) {
+export default function Signup() {
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const emailErrVisible = emailErr !== "";
@@ -66,9 +62,7 @@ export default function Signup({ navigation }: Props) {
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
         user.user.sendEmailVerification().finally(() => {
-          const parent = navigation.getParent()!;
-          parent.goBack();
-          parent.navigate("Account");
+          alert("Verification email sent.");
         });
       })
       .catch((err) => {
