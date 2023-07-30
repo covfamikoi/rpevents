@@ -647,7 +647,7 @@ PODS:
   - EXJSONUtils (0.7.1)
   - EXManifests (0.7.1):
     - ExpoModulesCore
-  - Expo (49.0.5):
+  - Expo (49.0.6):
     - ExpoModulesCore
   - expo-dev-client (2.4.6):
     - EXManifests
@@ -706,12 +706,14 @@ PODS:
     - React-Core
   - ExpoKeepAwake (12.3.0):
     - ExpoModulesCore
-  - ExpoModulesCore (1.5.8):
+  - ExpoModulesCore (1.5.9):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-NativeModulesApple
     - React-RCTAppDelegate
     - ReactCommon/turbomodule/core
+  - ExpoSystemUI (2.4.0):
+    - ExpoModulesCore
   - EXSplashScreen (0.20.5):
     - ExpoModulesCore
     - RCT-Folly (= 2021.07.22.00)
@@ -1305,6 +1307,7 @@ DEPENDENCIES:
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1407,6 +1410,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoSystemUI:
+    :path: "../node_modules/expo-system-ui/ios"
   EXSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
   EXUpdatesInterface:
@@ -1514,13 +1519,14 @@ SPEC CHECKSUMS:
   EXFont: 738c44c390953ebcbab075a4848bfbef025fd9ee
   EXJSONUtils: 6802be4282d42b97c51682468ddc1026a06f8276
   EXManifests: 8a4a480e3b58891d5657d3996a39229e5c96d912
-  Expo: f2485e8fab9988e5dcee34159df5e475c9c3730c
+  Expo: 5601f86edc81c7e7e1772b9af9ae58fa3b45ad53
   expo-dev-client: 4f773679557bc150e44eea1a1e3a3fd65ab82a5a
   expo-dev-launcher: 3455b56c202e656fcbd16eb1b9ff0397980e6b18
   expo-dev-menu: c3ef428bae0a9051cee7f19d67dffede04d71693
   expo-dev-menu-interface: bda969497e73dadc2663c479e0fa726ca79a306e
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
-  ExpoModulesCore: 0d6e427ad8d81bfcd3dd4cc3429318dade218e8e
+  ExpoModulesCore: 0a114333f029eaa2edc701334515b4e05343fac3
+  ExpoSystemUI: fa4854e3226e87f86d3383570264c6e4e90bc782
   EXSplashScreen: 2c80621e4bc952f5bea328304c2436f5fe21c2a0
   EXUpdatesInterface: 82ed48d417cdcd376c12ca1c2ce390d35500bed6
   FBLazyVector: 4cce221dd782d3ff7c4172167bba09d58af67ccb

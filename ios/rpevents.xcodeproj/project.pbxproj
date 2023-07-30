@@ -11,11 +11,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		8FDFD9ABD78441B896D23FE3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 746FF0DC4EB44E338CFBB596 /* GoogleService-Info.plist */; };
-		98C455C784F547E2AAB0F2DA /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AAD184DEF7412E816D1DFA /* noop-file.swift */; };
+		62E72BDE95804AA1C50D2FAB /* Pods_rpevents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFF6EA25E490605370C54594 /* Pods_rpevents.framework */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		C81C5277F1FCE6D09D2E229D /* Pods_rpevents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9FD15BFA031183397BC072 /* Pods_rpevents.framework */; };
+		C8C59E99F1AC40478F11EB17 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDA202A5EC2144E685A70647 /* GoogleService-Info.plist */; };
+		FC6FA6C92B8545A482986A54 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A060E7F7054F39BE2BD48B /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,16 +25,16 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rpevents/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rpevents/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = rpevents/main.m; sourceTree = "<group>"; };
-		41180055464A47729892850F /* rpevents-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "rpevents-Bridging-Header.h"; path = "rpevents/rpevents-Bridging-Header.h"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-rpevents.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rpevents.debug.xcconfig"; path = "Target Support Files/Pods-rpevents/Pods-rpevents.debug.xcconfig"; sourceTree = "<group>"; };
-		746FF0DC4EB44E338CFBB596 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "rpevents/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-rpevents.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rpevents.release.xcconfig"; path = "Target Support Files/Pods-rpevents/Pods-rpevents.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = rpevents/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B1AAD184DEF7412E816D1DFA /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "rpevents/noop-file.swift"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BC9FD15BFA031183397BC072 /* Pods_rpevents.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rpevents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDA202A5EC2144E685A70647 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "rpevents/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EE57E80E996F41FA8894C6FF /* rpevents-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "rpevents-Bridging-Header.h"; path = "rpevents/rpevents-Bridging-Header.h"; sourceTree = "<group>"; };
+		F0A060E7F7054F39BE2BD48B /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "rpevents/noop-file.swift"; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-rpevents/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		FFF6EA25E490605370C54594 /* Pods_rpevents.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rpevents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C81C5277F1FCE6D09D2E229D /* Pods_rpevents.framework in Frameworks */,
+				62E72BDE95804AA1C50D2FAB /* Pods_rpevents.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,9 +59,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				746FF0DC4EB44E338CFBB596 /* GoogleService-Info.plist */,
-				B1AAD184DEF7412E816D1DFA /* noop-file.swift */,
-				41180055464A47729892850F /* rpevents-Bridging-Header.h */,
+				DDA202A5EC2144E685A70647 /* GoogleService-Info.plist */,
+				F0A060E7F7054F39BE2BD48B /* noop-file.swift */,
+				EE57E80E996F41FA8894C6FF /* rpevents-Bridging-Header.h */,
 			);
 			name = rpevents;
 			sourceTree = "<group>";
@@ -70,7 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				BC9FD15BFA031183397BC072 /* Pods_rpevents.framework */,
+				FFF6EA25E490605370C54594 /* Pods_rpevents.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -148,14 +148,14 @@
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
-				EA191D236FF0111D76600673 /* [Expo] Configure project */,
+				53A35C35E6C6399959A55AC4 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				ABEF403EEAB1BE24E41DBDD4 /* [CP] Embed Pods Frameworks */,
-				48905CE31E3FD67987307F68 /* [CP-User] [RNFB] Core Configuration */,
+				AB8659654B9EAF42CA87EB25 /* [CP] Embed Pods Frameworks */,
+				7A72EA8DCDC692803C2DA47F /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -205,7 +205,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				8FDFD9ABD78441B896D23FE3 /* GoogleService-Info.plist in Resources */,
+				C8C59E99F1AC40478F11EB17 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +248,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		48905CE31E3FD67987307F68 /* [CP-User] [RNFB] Core Configuration */ = {
+		53A35C35E6C6399959A55AC4 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-rpevents/expo-configure-project.sh\"\n";
+		};
+		7A72EA8DCDC692803C2DA47F /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -325,7 +344,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rpevents/Pods-rpevents-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ABEF403EEAB1BE24E41DBDD4 /* [CP] Embed Pods Frameworks */ = {
+		AB8659654B9EAF42CA87EB25 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -342,25 +361,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rpevents/Pods-rpevents-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		EA191D236FF0111D76600673 /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-rpevents/expo-configure-project.sh\"\n";
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -391,7 +391,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				98C455C784F547E2AAB0F2DA /* noop-file.swift in Sources */,
+				FC6FA6C92B8545A482986A54 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

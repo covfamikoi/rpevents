@@ -32,7 +32,6 @@
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
-      // "@react-native-firebase/firestore",
       [
         "expo-build-properties",
         {
@@ -44,6 +43,12 @@
     ],
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0d0cb718-10c7-4413-a2ed-9ad9b2af07c9"
+      }
+    },
+    "owner": "circuitsacul"
   }
 }
