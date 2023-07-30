@@ -1,7 +1,4 @@
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "react-native-paper";
@@ -14,7 +11,6 @@ import {
   HiddenHelperText,
   PasswordTextInput,
 } from "../../components";
-import { fireAuth } from "../../firebaseConfig";
 
 type Props = MaterialTopTabScreenProps<ParamListBase>;
 
@@ -66,9 +62,9 @@ export default function Signup({ navigation }: Props) {
     setEmailErr("");
     setPasswordErr("");
     setPassword2Err("");
-    createUserWithEmailAndPassword(fireAuth, email, password)
+    auth().createUserWithEmailAndPassword(email, password)
       .then((user) => {
-        sendEmailVerification(user.user).finally(() => {
+        user.user.sendEmailVerification().finally(() => {
           const parent = navigation.getParent()!;
           parent.goBack();
           parent.navigate("Account");

@@ -6,7 +6,7 @@ import { List } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { getConference } from "../../database";
+import { conferenceCollection } from "../../database";
 import { Conference } from "../../models";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
@@ -20,8 +20,8 @@ export default function ViewConference({ navigation, route }: Props) {
   async function refreshConference() {
     setRefreshing(true);
     try {
-      await getConference(route.params.conference.key).then((value) =>
-        setConference(value!),
+      await conferenceCollection.doc(route.params.conference.key).get().then((value) =>
+        setConference(value.data()!),
       );
     } finally {
       setRefreshing(false);

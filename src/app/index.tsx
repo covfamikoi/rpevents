@@ -1,6 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { Platform, useColorScheme } from "react-native";
 import {
@@ -10,6 +8,7 @@ import {
   PaperProvider,
   adaptNavigationTheme,
 } from "react-native-paper";
+import auth from "@react-native-firebase/auth";
 
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import {
@@ -36,8 +35,8 @@ import Home from "./home";
 import NewConference from "./new";
 
 import { ContextProvider } from "../contexts";
-import { fireAuth, fireDb } from "../firebaseConfig";
 import { Admin, Conference } from "../models";
+import { adminCollection } from "../database";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -98,25 +97,25 @@ export default function Index() {
     return colorScheme === "dark" ? DarkTheme : LightTheme;
   }, [colorScheme]);
 
-  const [user, setUser] = useState(fireAuth.currentUser);
+  const [user, setUser] = useState(auth().currentUser);
   const [admin, setAdmin] = useState<Admin | null>(null);
   const signedIn = user !== null;
 
-  useEffect(() =>
-    onAuthStateChanged(fireAuth, (newUser) => {
+  useEffect(() => {
+    auth().onUserChanged((newUser) => {
       if (user !== newUser) {
         setUser(newUser);
       }
-    }),
-  );
+    });
+  });
 
   useEffect(() => {
     if (user === null || !user.emailVerified) {
       setAdmin(null);
     } else {
-      getDoc(doc(fireDb, "admins", user.email!)).then((document) => {
+      adminCollection.doc(user.email!).get().then((document) => {
         const data = document.data();
-        const admin = data === undefined ? null : (data as Admin);
+        const admin = data === undefined ? null : data;
         setAdmin(admin);
       });
     }
