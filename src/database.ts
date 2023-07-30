@@ -25,7 +25,7 @@ export async function getConferences(user: User | null, keys: string[]) {
       await getDocs(
         query(
           collection(fireDb, "conferences"),
-          where("admins", "array-contains", user.email!),
+          where("managers", "array-contains", user.email!),
         ),
       )
     ).forEach((conf) => {
