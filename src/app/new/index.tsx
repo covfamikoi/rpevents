@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { useHeaderHeight } from "@react-navigation/elements";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
@@ -16,7 +18,10 @@ export default function NewConference() {
       <FocusAwareLightStatusBar />
       <TabControl.Navigator
         screenOptions={{
-          tabBarStyle: { backgroundColor: "transparent", marginTop: height },
+          tabBarStyle: {
+            backgroundColor: "transparent",
+            marginTop: Platform.OS === "ios" ? height : 0,
+          },
         }}
       >
         <TabControl.Screen name="Join" component={JoinConference} />

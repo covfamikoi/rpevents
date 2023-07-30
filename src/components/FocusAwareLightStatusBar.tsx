@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { Platform } from "react-native";
 
 import { useIsFocused } from "@react-navigation/native";
 
@@ -8,5 +9,7 @@ export default function FocusAwareLightStatusBar() {
 
   const focused = useIsFocused();
 
-  return focused ? <StatusBar style="light" animated={true} /> : null;
+  return focused && Platform.OS === "ios" ? (
+    <StatusBar style="light" animated={true} />
+  ) : null;
 }
