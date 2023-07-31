@@ -1,10 +1,13 @@
-import { useContext, useLayoutEffect, useMemo } from "react";
+import { useContext, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList } from "react-native";
 import { List, useTheme } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { ConferencesContext } from "../contexts/conferences";
+import {
+  ConferencesContext,
+  RefreshConferencexContext,
+} from "../contexts/conferences";
 
 import { RootStackParamList } from ".";
 
@@ -13,6 +16,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 export default function Home({ navigation }: Props) {
   const theme = useTheme();
   const conferences = useContext(ConferencesContext);
+  const refreshConferences = useContext(RefreshConferencexContext);
+  const [refreshing, setRefreshing] = useState(false);
 
   const listItems = useMemo(() => {
     let items = [
@@ -26,7 +31,7 @@ export default function Home({ navigation }: Props) {
       />,
     ];
     items.push(
-      ...[...conferences.values()].map((item) => {
+      ...conferences.map((item) => {
         return (
           <List.Item
             title={item.data.title}
@@ -53,6 +58,11 @@ export default function Home({ navigation }: Props) {
       contentInsetAdjustmentBehavior="automatic"
       data={listItems}
       renderItem={(item) => item.item}
+      refreshing={refreshing}
+      onRefresh={() => {
+        setRefreshing(true);
+        refreshConferences().then(() => setRefreshing(false));
+      }}
     />
   );
 }

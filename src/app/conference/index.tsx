@@ -4,7 +4,7 @@ import { List } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { RemoveConferencesContext } from "../../contexts/conferences";
+import { RefreshConferencexContext } from "../../contexts/conferences";
 import { conferenceCollection } from "../../database";
 import { Conference, Document } from "../../models";
 
@@ -13,7 +13,7 @@ import { RootStackParamList } from "..";
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
 
 export default function ViewConference({ navigation, route }: Props) {
-  const removeConferences = useContext(RemoveConferencesContext);
+  const refreshConferences = useContext(RefreshConferencexContext);
   const [conference, setConference] = useState<Document<Conference>>(
     route.params.conference,
   );
@@ -24,10 +24,10 @@ export default function ViewConference({ navigation, route }: Props) {
         const data = doc.data();
         if (data === undefined) {
           navigation.goBack();
-          removeConferences([doc.id]);
         } else {
           setConference({ id: doc.id, data: data });
         }
+        refreshConferences();
       },
     });
   }, [conference.id]);
