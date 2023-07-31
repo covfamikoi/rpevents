@@ -8,15 +8,14 @@ import { ParamListBase } from "@react-navigation/native";
 import { ConfKeyTextInput } from "../../components";
 import HiddenHelperText from "../../components/HiddenHelperText";
 import {
-  AddConferencesContext,
   ConferencesContext,
+  RefreshConferencexContext,
 } from "../../contexts/conferences";
 import { conferenceCollection } from "../../database";
 
 type Props = MaterialTopTabScreenProps<ParamListBase>;
 
 export default function JoinConference({ navigation }: Props) {
-  const addConferences = useContext(AddConferencesContext);
   const conferences = useContext(ConferencesContext);
   const [err, setErr] = useState("");
 
@@ -27,7 +26,7 @@ export default function JoinConference({ navigation }: Props) {
   };
 
   function submit() {
-    const cached = conferences.get(keyInp);
+    const cached = conferences.find((value) => value.id == keyInp);
     if (cached !== undefined) {
       navigation.goBack();
       navigation.navigate("ViewConference", { conference: cached });
@@ -44,7 +43,6 @@ export default function JoinConference({ navigation }: Props) {
             return setErr("missing");
           default:
             const doc = { id: conf.id, data: data };
-            addConferences([doc]);
             navigation.goBack();
             navigation.navigate("ViewConference", { conference: doc });
         }

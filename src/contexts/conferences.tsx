@@ -13,19 +13,12 @@ import { Conference, Document } from "../models";
 
 import { UserContext } from "./auth";
 
-export const ConferencesContext = createContext<
-  Map<string, Document<Conference>>
->(new Map());
-export const AddConferencesContext = createContext<
-  (confs: Document<Conference>[]) => void
->((_) => {
-  throw "Tried to add a conference outside of conference context.";
-});
-export const RemoveConferencesContext = createContext<
-  (confs: string[]) => void
->((_) => {
-  throw "Tried to remove conferences outside of conference context.";
-});
+export const ConferencesContext = createContext<Document<Conference>[]>([]);
+export const RefreshConferencexContext = createContext<() => Promise<void>>(
+  () => {
+    throw "refresh context not ready";
+  },
+);
 
 export default function ConferencesProvider({
   children,
@@ -34,38 +27,24 @@ export default function ConferencesProvider({
 }) {
   const [loading, setLoading] = useState(true);
   const user = useContext(UserContext);
-  const [conferences, setConferences] = useState<
-    Map<string, Document<Conference>>
-  >(new Map());
+  const [conferences, setConferences] = useState<Document<Conference>[]>([]);
 
-  function addConferences(confs: Document<Conference>[]) {
-    const toAdd = confs
-      .filter((value, _index) => !conferences.has(value.id))
-      .map((conf, _index) => [conf.id, conf] as [string, Document<Conference>]);
-    if (toAdd.length === 0) {
-      return;
-    }
-
-    setConferences(new Map([...conferences.entries(), ...toAdd]));
-  }
-
-  function removeConference(confs: string[]) {
-    setConferences(
-      new Map(
-        [...conferences.entries()].filter(
-          (value, _index) => !confs.includes(value[0]),
-        ),
-      ),
-    );
+  function refreshConferences() {
+    return conferenceCollection
+      .orderBy("start", "asc")
+      .get({ source: "cache" })
+      .then((data) => {
+        setConferences(
+          data.docs
+            .filter((doc) => doc.exists)
+            .map((doc) => ({ id: doc.id, data: doc.data()! })),
+        );
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
-    conferenceCollection.get({ source: "cache" }).then((data) => {
-      addConferences(
-        data.docs.map((doc) => ({ id: doc.id, data: doc.data() })),
-      );
-      setLoading(false);
-    });
+    refreshConferences();
   }, []);
 
   const shouldOpenStream = user !== null && user.emailVerified && !loading;
@@ -79,7 +58,7 @@ export default function ConferencesProvider({
       "array-contains",
       user.email!,
     );
-    let notIn = [...conferences.keys()];
+    let notIn = conferences.map((conf) => conf.id);
     if (notIn.length > 0) {
       query = query.where(
         firebase.firestore.FieldPath.documentId(),
@@ -89,21 +68,15 @@ export default function ConferencesProvider({
     }
     return query.onSnapshot({
       error: (err) => console.log(err),
-      next: (snapshot) => {
-        addConferences(
-          snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })),
-        );
-      },
+      next: (_) => refreshConferences(),
     });
-  }, [shouldOpenStream, conferences.size]);
+  }, [shouldOpenStream, conferences.length]);
 
   return (
     <ConferencesContext.Provider value={conferences}>
-      <AddConferencesContext.Provider value={addConferences}>
-        <RemoveConferencesContext.Provider value={removeConference}>
-          {children}
-        </RemoveConferencesContext.Provider>
-      </AddConferencesContext.Provider>
+      <RefreshConferencexContext.Provider value={refreshConferences}>
+        {children}
+      </RefreshConferencexContext.Provider>
     </ConferencesContext.Provider>
   );
 }
