@@ -13,20 +13,13 @@ import { List, useTheme } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { UserContext } from "../contexts/auth";
-import { KeysContext } from "../contexts/keys";
-import { getConferences } from "../database";
-import { Conference } from "../models";
+import { ConferencesContext } from "../contexts/conferences";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function Home({ navigation }: Props) {
   const theme = useTheme();
-
-  const [data, setData] = useState<Conference[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const { keys } = useContext(KeysContext);
-  const user = useContext(UserContext);
+  const conferences = useContext(ConferencesContext);
 
   const listItems = useMemo(() => {
     let items = [
@@ -40,7 +33,7 @@ export default function Home({ navigation }: Props) {
       />,
     ];
     items.push(
-      ...data.map((item) => {
+      ...[...conferences.values()].map((item) => {
         return (
           <List.Item
             title={item.title}
@@ -52,24 +45,7 @@ export default function Home({ navigation }: Props) {
       }),
     );
     return items;
-  }, [data]);
-
-  async function refreshData() {
-    if (refreshing) {
-      return;
-    }
-    setRefreshing(true);
-    try {
-      const conferences = await getConferences(user, keys);
-      setData(conferences);
-    } finally {
-      setRefreshing(false);
-    }
-  }
-
-  useEffect(() => {
-    refreshData();
-  }, [user, keys]);
+  }, [conferences]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -83,8 +59,6 @@ export default function Home({ navigation }: Props) {
     <FlatList
       contentInsetAdjustmentBehavior="automatic"
       data={listItems}
-      refreshing={refreshing}
-      onRefresh={refreshData}
       renderItem={(item) => item.item}
     />
   );

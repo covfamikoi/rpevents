@@ -1,7 +1,7 @@
 import { RootStackParamList } from "..";
 
-import { useState } from "react";
-import { RefreshControl, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView } from "react-native";
 import { List } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -15,27 +15,23 @@ export default function ViewConference({ navigation, route }: Props) {
   const [conference, setConference] = useState<Conference>(
     route.params.conference,
   );
-  const [refreshing, setRefreshing] = useState(false);
 
-  async function refreshConference() {
-    setRefreshing(true);
-    try {
-      await conferenceCollection
-        .doc(route.params.conference.key)
-        .get()
-        .then((value) => setConference(value.data()!));
-    } finally {
-      setRefreshing(false);
-    }
-  }
+  useEffect(() => {
+    return conferenceCollection.doc(conference.key).onSnapshot({
+      next: (doc) => {
+        const data = doc.data();
+        if (data === undefined) {
+          navigation.goBack();
+          // todo: remove conference from cache
+        } else {
+          setConference(data);
+        }
+      },
+    });
+  }, [conference.key]);
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={refreshConference} />
-      }
-    >
+    <ScrollView contentInsetAdjustmentBehavior="automatic">
       <List.Item
         title="Announcements"
         left={(props) => <List.Icon icon="bullhorn-variant" {...props} />}
