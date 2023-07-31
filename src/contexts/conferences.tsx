@@ -6,6 +6,8 @@ import {
   useState,
 } from "react";
 
+import firebase from "@react-native-firebase/app";
+
 import { UserContext } from "./auth";
 
 import { conferenceCollection } from "../database";
@@ -62,9 +64,13 @@ export default function ConferencesProvider({
     );
     let notIn = [...conferences.keys()];
     if (notIn.length > 0) {
-      query = query.where("key", "not-in", [notIn]);
+      query = query.where(
+        firebase.firestore.FieldPath.documentId(),
+        "not-in",
+        notIn,
+      );
     }
-    return query.onSnapshot({
+    query.onSnapshot({
       next: (snapshot) => {
         addConferences(snapshot.docs.map((doc) => doc.data()));
       },
