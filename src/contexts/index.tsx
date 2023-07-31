@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 import AuthStateProvider from "./auth";
-import { KeysContextProvider } from "./keys";
+import ConferencesProvider from "./conferences";
 import ThemeProvider from "./theme";
 
 type Props = {
@@ -12,7 +12,7 @@ export default function RootContextProvider({ children }: Props) {
   return (
     <ThemeProvider>
       <AuthStateProvider>
-        <KeysContextProvider>{children}</KeysContextProvider>
+        <ConferencesProvider>{children}</ConferencesProvider>
       </AuthStateProvider>
     </ThemeProvider>
   );

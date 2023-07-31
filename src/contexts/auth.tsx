@@ -28,14 +28,13 @@ export default function AuthStateProvider({
     if (user === null || !user.emailVerified) {
       setAdmin(null);
     } else {
-      adminCollection
-        .doc(user.email!)
-        .get()
-        .then((document) => {
-          const data = document.data();
+      return adminCollection.doc(user.email!).onSnapshot({
+        next: (doc) => {
+          const data = doc.data();
           const admin = data === undefined ? null : data;
           setAdmin(admin);
-        });
+        },
+      });
     }
   }, [user === null || !user.emailVerified]);
 
