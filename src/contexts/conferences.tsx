@@ -70,7 +70,7 @@ export default function ConferencesProvider({
         notIn,
       );
     }
-    query.onSnapshot({
+    return query.onSnapshot({
       next: (snapshot) => {
         addConferences(snapshot.docs.map((doc) => doc.data()));
       },
