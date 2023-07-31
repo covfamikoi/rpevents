@@ -8,29 +8,29 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { RemoveConferencesContext } from "../../contexts/conferences";
 import { conferenceCollection } from "../../database";
-import { Conference } from "../../models";
+import { Conference, Document } from "../../models";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
 
 export default function ViewConference({ navigation, route }: Props) {
   const removeConferences = useContext(RemoveConferencesContext);
-  const [conference, setConference] = useState<Conference>(
+  const [conference, setConference] = useState<Document<Conference>>(
     route.params.conference,
   );
 
   useEffect(() => {
-    return conferenceCollection.doc(conference.key).onSnapshot({
+    return conferenceCollection.doc(conference.id).onSnapshot({
       next: (doc) => {
         const data = doc.data();
         if (data === undefined) {
           navigation.goBack();
           removeConferences([doc.id]);
         } else {
-          setConference(data);
+          setConference({ id: doc.id, data: data });
         }
       },
     });
-  }, [conference.key]);
+  }, [conference.id]);
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">

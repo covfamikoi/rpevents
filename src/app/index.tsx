@@ -17,17 +17,16 @@ import NewConference from "./new";
 import UserModal from "./user";
 
 import RootContextProvider from "../contexts";
-import AuthStateProvider from "../contexts/auth";
-import { Conference } from "../models";
+import { Conference, Document } from "../models";
 
 export type RootStackParamList = {
   Home: undefined;
   NewConference: undefined;
   User: undefined;
-  ViewConference: { conference: Conference };
-  ViewConferenceAnnouncements: { conference: Conference };
-  ViewConferenceCalendar: { conference: Conference };
-  ViewConferenceMap: { conference: Conference };
+  ViewConference: { conference: Document<Conference> };
+  ViewConferenceAnnouncements: { conference: Document<Conference> };
+  ViewConferenceCalendar: { conference: Document<Conference> };
+  ViewConferenceMap: { conference: Document<Conference> };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -77,7 +76,7 @@ export default function Index() {
           component={ViewConference}
           name="ViewConference"
           options={withAccountButton(({ route }) => ({
-            title: route.params.conference.title,
+            title: route.params.conference.data.title,
             headerLargeTitle: true,
           }))}
         />

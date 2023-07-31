@@ -28,7 +28,6 @@ export interface Event {
 
 export interface Conference {
   title: string;
-  key: string;
 
   start: FirebaseFirestoreTypes.Timestamp;
   end: FirebaseFirestoreTypes.Timestamp;
@@ -41,4 +40,9 @@ export interface Conference {
   announcements: Announcement[];
   locations: Location[];
   events: Event[];
+}
+
+export interface Document<T extends FirebaseFirestoreTypes.DocumentData> {
+  id: string;
+  data: T;
 }

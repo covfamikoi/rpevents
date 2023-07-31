@@ -36,7 +36,7 @@ export default function Home({ navigation }: Props) {
       ...[...conferences.values()].map((item) => {
         return (
           <List.Item
-            title={item.title}
+            title={item.data.title}
             onPress={() =>
               navigation.navigate("ViewConference", { conference: item })
             }

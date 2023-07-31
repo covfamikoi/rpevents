@@ -11,13 +11,13 @@ import firebase from "@react-native-firebase/app";
 import { UserContext } from "./auth";
 
 import { conferenceCollection } from "../database";
-import { Conference } from "../models";
+import { Conference, Document } from "../models";
 
-export const ConferencesContext = createContext<Map<string, Conference>>(
-  new Map(),
-);
+export const ConferencesContext = createContext<
+  Map<string, Document<Conference>>
+>(new Map());
 export const AddConferencesContext = createContext<
-  (confs: Conference[]) => void
+  (confs: Document<Conference>[]) => void
 >((_) => {
   throw "Tried to add a conference outside of conference context.";
 });
@@ -34,14 +34,14 @@ export default function ConferencesProvider({
 }) {
   const [loading, setLoading] = useState(true);
   const user = useContext(UserContext);
-  const [conferences, setConferences] = useState<Map<string, Conference>>(
-    new Map(),
-  );
+  const [conferences, setConferences] = useState<
+    Map<string, Document<Conference>>
+  >(new Map());
 
-  function addConferences(confs: Conference[]) {
+  function addConferences(confs: Document<Conference>[]) {
     const toAdd = confs
-      .filter((value, _index) => !conferences.has(value.key))
-      .map((conf, _index) => [conf.key, conf] as [string, Conference]);
+      .filter((value, _index) => !conferences.has(value.id))
+      .map((conf, _index) => [conf.id, conf] as [string, Document<Conference>]);
     if (toAdd.length === 0) {
       return;
     }
@@ -61,7 +61,9 @@ export default function ConferencesProvider({
 
   useEffect(() => {
     conferenceCollection.get({ source: "cache" }).then((data) => {
-      addConferences(data.docs.map((doc) => doc.data()));
+      addConferences(
+        data.docs.map((doc) => ({ id: doc.id, data: doc.data() })),
+      );
       setLoading(false);
     });
   }, []);
@@ -88,7 +90,9 @@ export default function ConferencesProvider({
     return query.onSnapshot({
       error: (err) => console.log(err),
       next: (snapshot) => {
-        addConferences(snapshot.docs.map((doc) => doc.data()));
+        addConferences(
+          snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })),
+        );
       },
     });
   }, [shouldOpenStream, conferences.size]);

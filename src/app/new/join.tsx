@@ -43,9 +43,10 @@ export default function JoinConference({ navigation }: Props) {
           case undefined:
             return setErr("missing");
           default:
-            addConferences([data]);
+            const doc = { id: conf.id, data: data };
+            addConferences([doc]);
             navigation.goBack();
-            navigation.navigate("ViewConference", { conference: data });
+            navigation.navigate("ViewConference", { conference: doc });
         }
       })
       .catch((err) => setErr(err.code));
