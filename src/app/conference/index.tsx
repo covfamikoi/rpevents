@@ -1,5 +1,3 @@
-import { RootStackParamList } from "..";
-
 import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { List } from "react-native-paper";
@@ -9,6 +7,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RemoveConferencesContext } from "../../contexts/conferences";
 import { conferenceCollection } from "../../database";
 import { Conference, Document } from "../../models";
+
+import { RootStackParamList } from "..";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
 
