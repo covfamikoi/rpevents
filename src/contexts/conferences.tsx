@@ -21,6 +21,11 @@ export const AddConferencesContext = createContext<
 >((_) => {
   throw "Tried to add a conference outside of conference context.";
 });
+export const RemoveConferencesContext = createContext<
+  (confs: string[]) => void
+>((_) => {
+  throw "Tried to remove conferences outside of conference context.";
+});
 
 export default function ConferencesProvider({
   children,
@@ -42,6 +47,16 @@ export default function ConferencesProvider({
     }
 
     setConferences(new Map([...conferences.entries(), ...toAdd]));
+  }
+
+  function removeConference(confs: string[]) {
+    setConferences(
+      new Map(
+        [...conferences.entries()].filter(
+          (value, _index) => !confs.includes(value[0]),
+        ),
+      ),
+    );
   }
 
   useEffect(() => {
@@ -71,6 +86,7 @@ export default function ConferencesProvider({
       );
     }
     return query.onSnapshot({
+      error: (err) => console.log(err),
       next: (snapshot) => {
         addConferences(snapshot.docs.map((doc) => doc.data()));
       },
@@ -80,7 +96,9 @@ export default function ConferencesProvider({
   return (
     <ConferencesContext.Provider value={conferences}>
       <AddConferencesContext.Provider value={addConferences}>
-        {children}
+        <RemoveConferencesContext.Provider value={removeConference}>
+          {children}
+        </RemoveConferencesContext.Provider>
       </AddConferencesContext.Provider>
     </ConferencesContext.Provider>
   );

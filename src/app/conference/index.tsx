@@ -1,17 +1,19 @@
 import { RootStackParamList } from "..";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { List } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { RemoveConferencesContext } from "../../contexts/conferences";
 import { conferenceCollection } from "../../database";
 import { Conference } from "../../models";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
 
 export default function ViewConference({ navigation, route }: Props) {
+  const removeConferences = useContext(RemoveConferencesContext);
   const [conference, setConference] = useState<Conference>(
     route.params.conference,
   );
@@ -22,7 +24,7 @@ export default function ViewConference({ navigation, route }: Props) {
         const data = doc.data();
         if (data === undefined) {
           navigation.goBack();
-          // todo: remove conference from cache
+          removeConferences([doc.id]);
         } else {
           setConference(data);
         }
