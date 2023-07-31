@@ -1,3 +1,5 @@
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 export interface Admin {
   createConferences: boolean;
   manageAdmins: boolean;
@@ -6,12 +8,12 @@ export interface Admin {
 export interface Announcement {
   title: string;
   content: string;
-  postedAt: any;
+  postedAt: FirebaseFirestoreTypes.Timestamp;
 }
 
 export interface Location {
   name: string;
-  location: any;
+  location: FirebaseFirestoreTypes.GeoPoint;
 }
 
 export interface Event {
@@ -20,18 +22,18 @@ export interface Event {
 
   location: number;
 
-  start: any;
-  end: any;
+  start: FirebaseFirestoreTypes.Timestamp;
+  end: FirebaseFirestoreTypes.Timestamp;
 }
 
 export interface Conference {
   title: string;
   key: string;
 
-  start: any;
-  end: any;
+  start: FirebaseFirestoreTypes.Timestamp;
+  end: FirebaseFirestoreTypes.Timestamp;
 
-  topLeft: any;
+  topLeft: FirebaseFirestoreTypes.GeoPoint;
   tileWidth: number;
   tileHeight: number;
 
