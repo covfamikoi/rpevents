@@ -8,10 +8,10 @@ import {
 
 import firebase from "@react-native-firebase/app";
 
-import { UserContext } from "./auth";
-
 import { conferenceCollection } from "../database";
 import { Conference, Document } from "../models";
+
+import { UserContext } from "./auth";
 
 export const ConferencesContext = createContext<
   Map<string, Document<Conference>>

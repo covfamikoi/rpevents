@@ -8,6 +8,9 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
+import RootContextProvider from "../contexts";
+import { Conference, Document } from "../models";
+
 import ViewConference from "./conference";
 import ViewConferenceAnnouncements from "./conference/announcements";
 import ViewConferenceCalendar from "./conference/calendar";
@@ -15,9 +18,6 @@ import ViewConferenceMap from "./conference/map";
 import Home from "./home";
 import NewConference from "./new";
 import UserModal from "./user";
-
-import RootContextProvider from "../contexts";
-import { Conference, Document } from "../models";
 
 export type RootStackParamList = {
   Home: undefined;

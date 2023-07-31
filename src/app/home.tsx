@@ -1,19 +1,12 @@
-import { RootStackParamList } from ".";
-
-import {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useContext, useLayoutEffect, useMemo } from "react";
 import { FlatList } from "react-native";
 import { List, useTheme } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { UserContext } from "../contexts/auth";
 import { ConferencesContext } from "../contexts/conferences";
+
+import { RootStackParamList } from ".";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 

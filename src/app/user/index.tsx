@@ -1,14 +1,14 @@
-import { RootStackParamList } from "..";
-
 import { useContext, useEffect } from "react";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import Account from "./account";
-import Authentication from "./authentication";
-
 import { FocusAwareLightStatusBar } from "../../components";
 import { UserContext } from "../../contexts/auth";
+
+import { RootStackParamList } from "..";
+
+import Account from "./account";
+import Authentication from "./authentication";
 
 export type UserModalProps = NativeStackScreenProps<RootStackParamList, "User">;
 

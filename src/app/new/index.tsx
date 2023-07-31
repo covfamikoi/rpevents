@@ -3,10 +3,10 @@ import { Platform } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
+import { FocusAwareLightStatusBar } from "../../components";
+
 import CreateConference from "./create";
 import JoinConference from "./join";
-
-import { FocusAwareLightStatusBar } from "../../components";
 
 const TabControl = createMaterialTopTabNavigator();
 
