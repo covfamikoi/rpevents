@@ -16,13 +16,13 @@ export default function AuthStateProvider({
   const [user, setUser] = useState(auth().currentUser);
   const [admin, setAdmin] = useState<Admin | null>(null);
 
-  useEffect(() => {
+  useEffect(() =>
     auth().onUserChanged((newUser) => {
       if (user !== newUser) {
         setUser(newUser);
       }
-    });
-  });
+    }),
+  );
 
   useEffect(() => {
     if (user === null || !user.emailVerified) {
