@@ -1,14 +1,12 @@
-import { ReactNode, useMemo, useRef } from "react";
-import { Dimensions, View } from "react-native";
+import { ReactNode, useMemo } from "react";
+import { View } from "react-native";
 import { SharedValue } from "react-native-gesture-handler/lib/typescript/handlers/gestures/reanimatedWrapper";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
   interpolate,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import BottomSheet from "@gorhom/bottom-sheet";
 
@@ -48,55 +46,33 @@ function RowItem({
 
 function CalendarRow({
   children,
-  mode,
+  selected = false,
   index,
-  animatedPos,
-  range,
+  animatedIndex,
   height = 30,
 }: {
   children: ReactNode;
-  mode: "selected" | "stay" | "down" | "none";
+  selected?: boolean;
   index: number;
-  animatedPos: SharedValue<number>;
-  range: SharedValue<[number, number]>;
+  animatedIndex: SharedValue<number>;
   height?: number;
 }) {
   const marginV = 5;
 
   const offset = height + 2 * marginV;
-  var to: [number, number];
-  switch (mode) {
-    case "selected":
-      to = [-offset * index, 0];
-      break;
-    case "down":
-      to = [offset, 0];
-      break;
-    case "stay":
-    case "none":
-      to = [0, 0];
-      break;
-  }
+  var to: [number, number] = selected ? [-offset * index, 0] : [0, 0];
 
   const rowStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: interpolate(animatedPos.value, range.value, to, "clamp") },
+      { translateY: interpolate(animatedIndex.value, [0, 1], to, "clamp") },
     ],
-    opacity:
-      mode !== "selected"
-        ? interpolate(
-            animatedPos.value,
-            [
-              range.value[0] + (range.value[1] - range.value[0]) / 1.3,
-              range.value[1],
-            ],
-            [0, 1],
-          )
-        : 1,
+    opacity: selected
+      ? 1
+      : interpolate(animatedIndex.value, [0.8, 1], [0, 1], "clamp"),
   }));
 
   return (
-    <Animated.View style={mode !== "none" ? rowStyle : {}}>
+    <Animated.View style={rowStyle}>
       <View
         style={{
           flexDirection: "row",
@@ -113,42 +89,36 @@ function CalendarRow({
 
 export default function Index() {
   const theme = useTheme();
-  const windowHeight = Dimensions.get("window").height;
-  const offsets = useSafeAreaInsets();
-  const offsetsShared = useSharedValue(offsets);
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo<[number, number]>(() => [110, 275], []);
-  const animatedPos = useSharedValue(0);
-  const animatedPosRange = useDerivedValue<[number, number]>(
-    () => [
-      windowHeight - snapPoints[0] - offsetsShared.value.top,
-      windowHeight - snapPoints[1] - offsetsShared.value.top,
-    ],
-    [snapPoints, windowHeight, offsetsShared],
-  );
+
+  const animatedIndex = useSharedValue(0);
 
   return (
     <BottomSheet
-      ref={bottomSheetRef}
-      animatedPosition={animatedPos}
+      animatedIndex={animatedIndex}
       index={0}
       snapPoints={snapPoints}
-      style={{ shadowOpacity: 0.2, shadowColor: theme.colors.shadow }}
+      style={{
+        shadowOpacity: 0.2,
+        shadowColor: theme.colors.shadow,
+        backgroundColor: theme.colors.elevation.level1,
+        borderRadius: 15,
+      }}
       handleIndicatorStyle={{ backgroundColor: theme.colors.tertiary }}
       backgroundStyle={{ backgroundColor: theme.colors.elevation.level1 }}
-      containerOffset={offsetsShared}
     >
       <Animated.View>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Text>August 2023</Text>
         </View>
-        <CalendarRow
-          height={15}
-          mode="none"
-          index={0}
-          animatedPos={animatedPos}
-          range={animatedPosRange}
+        <View
+          style={{
+            height: 15,
+            marginVertical: 5,
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
         >
           <RowItem>Sun</RowItem>
           <RowItem>Mon</RowItem>
@@ -157,13 +127,8 @@ export default function Index() {
           <RowItem>Thu</RowItem>
           <RowItem>Fri</RowItem>
           <RowItem>Sat</RowItem>
-        </CalendarRow>
-        <CalendarRow
-          mode="down"
-          index={0}
-          animatedPos={animatedPos}
-          range={animatedPosRange}
-        >
+        </View>
+        <CalendarRow index={0} animatedIndex={animatedIndex}>
           <RowItem>1</RowItem>
           <RowItem>2</RowItem>
           <RowItem>3</RowItem>
@@ -172,12 +137,7 @@ export default function Index() {
           <RowItem>6</RowItem>
           <RowItem>7</RowItem>
         </CalendarRow>
-        <CalendarRow
-          mode="selected"
-          index={1}
-          animatedPos={animatedPos}
-          range={animatedPosRange}
-        >
+        <CalendarRow selected index={1} animatedIndex={animatedIndex}>
           <RowItem>8</RowItem>
           <RowItem highlighted>9</RowItem>
           <RowItem>10</RowItem>
@@ -186,12 +146,7 @@ export default function Index() {
           <RowItem>13</RowItem>
           <RowItem>14</RowItem>
         </CalendarRow>
-        <CalendarRow
-          mode="stay"
-          index={2}
-          animatedPos={animatedPos}
-          range={animatedPosRange}
-        >
+        <CalendarRow index={2} animatedIndex={animatedIndex}>
           <RowItem>15</RowItem>
           <RowItem>16</RowItem>
           <RowItem>17</RowItem>
@@ -200,12 +155,7 @@ export default function Index() {
           <RowItem>20</RowItem>
           <RowItem>21</RowItem>
         </CalendarRow>
-        <CalendarRow
-          mode="stay"
-          index={2}
-          animatedPos={animatedPos}
-          range={animatedPosRange}
-        >
+        <CalendarRow index={3} animatedIndex={animatedIndex}>
           <RowItem>22</RowItem>
           <RowItem>23</RowItem>
           <RowItem>24</RowItem>
@@ -214,12 +164,7 @@ export default function Index() {
           <RowItem>27</RowItem>
           <RowItem>28</RowItem>
         </CalendarRow>
-        <CalendarRow
-          mode="stay"
-          index={2}
-          animatedPos={animatedPos}
-          range={animatedPosRange}
-        >
+        <CalendarRow index={4} animatedIndex={animatedIndex}>
           <RowItem>29</RowItem>
           <RowItem>30</RowItem>
           <RowItem>31</RowItem>
