@@ -1,6 +1,3 @@
-import { View } from "react-native";
-
-import { useHeaderHeight } from "@react-navigation/elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import Calendar from "../../components/calendar";
@@ -13,12 +10,5 @@ type Props = NativeStackScreenProps<
 >;
 
 export default function CalendarView({}: Props) {
-  const height = useHeaderHeight();
-
-  return (
-    <>
-      {/* <View style={{ height: height }} /> */}
-      <Calendar />
-    </>
-  );
+  return <Calendar />;
 }

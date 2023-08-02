@@ -1,11 +1,9 @@
-import { ReactNode, useCallback, useMemo, useRef } from "react";
-import { Dimensions, StyleSheet, View, useAnimatedValue } from "react-native";
+import { ReactNode, useMemo, useRef } from "react";
+import { Dimensions, View } from "react-native";
 import { SharedValue } from "react-native-gesture-handler/lib/typescript/handlers/gestures/reanimatedWrapper";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
-  Extrapolation,
   interpolate,
-  useAnimatedReaction,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -13,7 +11,6 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import BottomSheet from "@gorhom/bottom-sheet";
-import { useHeaderHeight } from "@react-navigation/elements";
 
 function RowItem({
   children,
@@ -117,7 +114,6 @@ function CalendarRow({
 export default function Index() {
   const theme = useTheme();
   const windowHeight = Dimensions.get("window").height;
-  const header = useHeaderHeight();
   const offsets = useSafeAreaInsets();
   const offsetsShared = useSharedValue(offsets);
 
