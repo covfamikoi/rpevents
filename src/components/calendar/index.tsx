@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useMemo } from "react";
+import { ReactNode, useContext, useMemo, useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
@@ -129,10 +129,12 @@ function MonthPage({
   animatedIndex,
   month,
   date,
+  key,
 }: {
   animatedIndex: SharedValue<number>;
   month: CalendarMonth;
   date: CalendarDate;
+  key: string;
 }) {
   const firstDay: CalendarDate = { day: 1, ...month };
   const lastDay: CalendarDate = lastDateInMonth(month);
@@ -153,21 +155,18 @@ function MonthPage({
   }, [offset, lastDay]);
 
   return (
-    <Animated.View
-      key={month.month + "-" + month.year.toString()}
-      style={{ flex: 1 }}
-    >
+    <Animated.View key={key} style={{ flex: 1 }}>
       {data.map((row, idx) => {
         return (
           <CalendarRow
-            key={`${month.month}-${month.year}-${idx}`}
+            key={`${key}-row-${idx}`}
             index={idx}
             animatedIndex={animatedIndex}
           >
             {row.map((_day, idx) => {
               const day = _day == null ? null : _day + 1;
               return (
-                <RowItem key={`${month.month}-${month.year}-${day}-${idx}`}>
+                <RowItem key={`${key}-day-${day}-${idx}`}>
                   {day == null ? "" : day.toString()}
                 </RowItem>
               );
@@ -187,6 +186,26 @@ export default function Index() {
 
   const animatedIndex = useSharedValue(0);
 
+  const months = useMemo<CalendarMonth[]>(
+    () => [
+      { year: 2023, month: "jan" },
+      { year: 2023, month: "feb" },
+      { year: 2023, month: "mar" },
+      { year: 2023, month: "apr" },
+      { year: 2023, month: "may" },
+      { year: 2023, month: "jun" },
+      { year: 2023, month: "jul" },
+      { year: 2023, month: "aug" },
+      { year: 2023, month: "sep" },
+      { year: 2023, month: "oct" },
+      { year: 2023, month: "nov" },
+      { year: 2023, month: "dec" },
+    ],
+    [],
+  );
+
+  let [currentIndex, setCurrentIndex] = useState(0);
+
   return (
     <BottomSheet
       animatedIndex={animatedIndex}
@@ -203,7 +222,10 @@ export default function Index() {
     >
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Text>
-          {date.month} {date.year}
+          {(function () {
+            const date = months.at(currentIndex)!;
+            return `${date.month} ${date.year}`;
+          })()}
         </Text>
       </View>
       <View
@@ -222,67 +244,26 @@ export default function Index() {
         <RowItem>Fri</RowItem>
         <RowItem>Sat</RowItem>
       </View>
-      <PagerView initialPage={0} style={{ flex: 1 }}>
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "jan" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "feb" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "mar" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "apr" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "may" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "jun" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "jul" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "aug" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "sep" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "nov" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "oct" }}
-        />
-        <MonthPage
-          animatedIndex={animatedIndex}
-          date={date}
-          month={{ year: 2023, month: "dec" }}
-        />
+      <PagerView
+        onPageSelected={(pos) => setCurrentIndex(pos.nativeEvent.position)}
+        initialPage={0}
+        style={{ flex: 1 }}
+      >
+        {months.map((month, idx) => {
+          const key = `${month.month}-${month.year}`;
+          if (currentIndex - 1 <= idx && idx <= currentIndex + 1) {
+            return (
+              <MonthPage
+                animatedIndex={animatedIndex}
+                date={date}
+                month={month}
+                key={key}
+              />
+            );
+          } else {
+            return <View key={key} />;
+          }
+        })}
       </PagerView>
     </BottomSheet>
   );
