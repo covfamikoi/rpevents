@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useMemo, useRef, useState } from "react";
+import { ReactNode, useContext, useMemo, useState } from "react";
 import { Dimensions, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
