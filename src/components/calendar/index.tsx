@@ -1,6 +1,5 @@
-import { ReactNode, useContext, useMemo, useRef } from "react";
-import { Dimensions, FlatList, ScrollView, View } from "react-native";
-import { ListView } from "react-native";
+import { ReactNode, useContext, useMemo } from "react";
+import { Dimensions, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
@@ -9,7 +8,6 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import ScrollBottomSheet from "react-native-scroll-bottom-sheet";
 import {
   CalendarDate,
   CalendarMonth,
@@ -17,7 +15,7 @@ import {
   lastDateInMonth,
 } from "typescript-calendar-date";
 
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 import { DateContext } from "./context";
 
