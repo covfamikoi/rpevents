@@ -1,19 +1,25 @@
 import { ReactNode, useContext, useMemo, useRef } from "react";
 import { Dimensions, FlatList, ScrollView, View } from "react-native";
+import { ListView } from "react-native";
+import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
+  SharedValue,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
-  SharedValue,
 } from "react-native-reanimated";
+import ScrollBottomSheet from "react-native-scroll-bottom-sheet";
+import {
+  CalendarDate,
+  CalendarMonth,
+  dayOfWeek,
+  lastDateInMonth,
+} from "typescript-calendar-date";
 
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+
 import { DateContext } from "./context";
-import { ListView } from "react-native";
-import ScrollBottomSheet from "react-native-scroll-bottom-sheet";
-import PagerView from "react-native-pager-view";
-import { CalendarDate, CalendarMonth, dayOfWeek, lastDateInMonth } from "typescript-calendar-date";
 
 function RowItem({
   children,
@@ -96,19 +102,41 @@ function CalendarRow({
 function offset(day: CalendarDate): number {
   let offset: number;
   switch (dayOfWeek(day)) {
-    case "sun": offset = 0; break
-    case "mon": offset = 1; break
-    case "tue": offset = 2; break
-    case "wed": offset = 3; break
-    case "thu": offset = 4; break
-    case "fri": offset = 5; break
-    case "sat": offset = 6; break
-  };
-  return offset
+    case "sun":
+      offset = 0;
+      break;
+    case "mon":
+      offset = 1;
+      break;
+    case "tue":
+      offset = 2;
+      break;
+    case "wed":
+      offset = 3;
+      break;
+    case "thu":
+      offset = 4;
+      break;
+    case "fri":
+      offset = 5;
+      break;
+    case "sat":
+      offset = 6;
+      break;
+  }
+  return offset;
 }
 
-function MonthPage({animatedIndex, month, date}: {animatedIndex: SharedValue<number>, month: CalendarMonth, date: CalendarDate}) {
-  const firstDay: CalendarDate = {day: 1, ...month};
+function MonthPage({
+  animatedIndex,
+  month,
+  date,
+}: {
+  animatedIndex: SharedValue<number>;
+  month: CalendarMonth;
+  date: CalendarDate;
+}) {
+  const firstDay: CalendarDate = { day: 1, ...month };
   const lastDay: CalendarDate = lastDateInMonth(month);
   const startOffset = offset(firstDay);
   const endOffset = 6 - offset(lastDay);
@@ -127,15 +155,24 @@ function MonthPage({animatedIndex, month, date}: {animatedIndex: SharedValue<num
   }, [offset, lastDay]);
 
   return (
-    <Animated.View key={month.month + "-" + month.year.toString()} style={{flex: 1}}>
+    <Animated.View
+      key={month.month + "-" + month.year.toString()}
+      style={{ flex: 1 }}
+    >
       {data.map((row, idx) => {
         return (
-          <CalendarRow key={`${month.month}-${month.year}-${idx}`} index={idx} animatedIndex={animatedIndex}>
+          <CalendarRow
+            key={`${month.month}-${month.year}-${idx}`}
+            index={idx}
+            animatedIndex={animatedIndex}
+          >
             {row.map((_day, idx) => {
               const day = _day == null ? null : _day + 1;
               return (
-                <RowItem key={`${month.month}-${month.year}-${day}-${idx}`}>{day == null ? "" : day.toString()}</RowItem>
-              )
+                <RowItem key={`${month.month}-${month.year}-${day}-${idx}`}>
+                  {day == null ? "" : day.toString()}
+                </RowItem>
+              );
             })}
           </CalendarRow>
         );
@@ -167,7 +204,9 @@ export default function Index() {
       backgroundStyle={{ backgroundColor: theme.colors.elevation.level1 }}
     >
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <Text>{date.month} {date.year}</Text>
+        <Text>
+          {date.month} {date.year}
+        </Text>
       </View>
       <View
         style={{
@@ -185,19 +224,67 @@ export default function Index() {
         <RowItem>Fri</RowItem>
         <RowItem>Sat</RowItem>
       </View>
-      <PagerView initialPage={0} style={{flex: 1}}>
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "jan"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "feb"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "mar"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "apr"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "may"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "jun"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "jul"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "aug"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "sep"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "nov"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "oct"}} />
-        <MonthPage animatedIndex={animatedIndex} date={date} month={{year: 2023, month: "dec"}} />
+      <PagerView initialPage={0} style={{ flex: 1 }}>
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "jan" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "feb" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "mar" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "apr" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "may" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "jun" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "jul" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "aug" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "sep" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "nov" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "oct" }}
+        />
+        <MonthPage
+          animatedIndex={animatedIndex}
+          date={date}
+          month={{ year: 2023, month: "dec" }}
+        />
       </PagerView>
     </BottomSheet>
   );

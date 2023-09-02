@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import Calendar from "../../components/calendar";
+import DateProvider from "../../components/calendar/context";
 
 import { RootStackParamList } from "..";
-import DateProvider from "../../components/calendar/context";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
