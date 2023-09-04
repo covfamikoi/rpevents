@@ -12,7 +12,11 @@ export const RangeContext = createContext<
   [CalendarDate, CalendarDate] | undefined
 >(undefined);
 
-export default function DateProvider({ children }: { children: ReactNode }) {
+export default function CalendarProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const [date, setDate] = useState(() =>
     calendarDateFromJsDateObject(new Date()),
   );

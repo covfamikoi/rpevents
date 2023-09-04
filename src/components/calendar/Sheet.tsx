@@ -19,7 +19,7 @@ import { Month } from "typescript-calendar-date/dist/consts";
 
 import BottomSheet from "@gorhom/bottom-sheet";
 
-import { DateContext, RangeContext } from "./context";
+import { DateContext, RangeContext } from "./Provider";
 
 function RowItem({
   children,
@@ -180,7 +180,7 @@ function MonthPage({
   );
 }
 
-export default function Index() {
+export default function CalendarSheet() {
   const theme = useTheme();
   const [date, _setDate] = useContext(DateContext)!;
   const [startDate, endDate] = useContext(RangeContext)!;

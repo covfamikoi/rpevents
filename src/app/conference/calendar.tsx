@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import Calendar from "../../components/calendar";
-import DateProvider from "../../components/calendar/context";
+import { CalendarEvents, CalendarSheet } from "../../components";
+import { CalendarProvider } from "../../components";
 
 import { RootStackParamList } from "..";
 
@@ -12,8 +12,9 @@ type Props = NativeStackScreenProps<
 
 export default function CalendarView({}: Props) {
   return (
-    <DateProvider>
-      <Calendar />
-    </DateProvider>
+    <CalendarProvider>
+      <CalendarEvents />
+      <CalendarSheet />
+    </CalendarProvider>
   );
 }
