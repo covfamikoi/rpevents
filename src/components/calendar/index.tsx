@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useMemo, useState } from "react";
+import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { Dimensions, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
@@ -13,11 +13,13 @@ import {
   CalendarMonth,
   dayOfWeek,
   lastDateInMonth,
+  periodOfMonths,
 } from "typescript-calendar-date";
+import { Month } from "typescript-calendar-date/dist/consts";
 
 import BottomSheet from "@gorhom/bottom-sheet";
 
-import { DateContext } from "./context";
+import { DateContext, RangeContext } from "./context";
 
 function RowItem({
   children,
@@ -181,30 +183,32 @@ function MonthPage({
 export default function Index() {
   const theme = useTheme();
   const [date, _setDate] = useContext(DateContext)!;
+  const [startDate, endDate] = useContext(RangeContext)!;
 
   const snapPoints = useMemo<[number, number]>(() => [110, 315], []);
 
   const animatedIndex = useSharedValue(0);
 
-  const months = useMemo<CalendarMonth[]>(
-    () => [
-      { year: 2023, month: "jan" },
-      { year: 2023, month: "feb" },
-      { year: 2023, month: "mar" },
-      { year: 2023, month: "apr" },
-      { year: 2023, month: "may" },
-      { year: 2023, month: "jun" },
-      { year: 2023, month: "jul" },
-      { year: 2023, month: "aug" },
-      { year: 2023, month: "sep" },
-      { year: 2023, month: "oct" },
-      { year: 2023, month: "nov" },
-      { year: 2023, month: "dec" },
-    ],
-    [],
+  const [indexToMonth, monthToIndex] = useMemo(
+    function () {
+      const indexToMonth = periodOfMonths(startDate, endDate);
+      const monthToIndex: Map<Month, number> = new Map();
+      indexToMonth.forEach((month, idx) => {
+        monthToIndex.set(month.month, idx);
+      });
+      return [indexToMonth, monthToIndex];
+    },
+    [startDate, endDate],
   );
 
-  let [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, _setCurrentIndex] = useState(0);
+  useEffect(() => {
+    _setCurrentIndex(monthToIndex.get(date.month)!);
+  }, [date]);
+  const setCurrentIndex = (number: number) => {
+    _setCurrentIndex(number);
+    _setDate({ ...indexToMonth[number], day: 1 });
+  };
 
   return (
     <BottomSheet
@@ -223,7 +227,7 @@ export default function Index() {
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Text>
           {(function () {
-            const date = months.at(currentIndex)!;
+            const date = indexToMonth[currentIndex];
             return `${date.month} ${date.year}`;
           })()}
         </Text>
@@ -249,7 +253,7 @@ export default function Index() {
         initialPage={0}
         style={{ flex: 1 }}
       >
-        {months.map((month, idx) => {
+        {indexToMonth.map((month, idx) => {
           const key = `${month.month}-${month.year}`;
           if (currentIndex - 1 <= idx && idx <= currentIndex + 1) {
             return (

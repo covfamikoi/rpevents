@@ -1,21 +1,34 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useMemo, useState } from "react";
 import {
   CalendarDate,
   calendarDateFromJsDateObject,
+  lastDateInMonth,
 } from "typescript-calendar-date";
 
 export const DateContext = createContext<
   [CalendarDate, (date: CalendarDate) => void] | undefined
+>(undefined);
+export const RangeContext = createContext<
+  [CalendarDate, CalendarDate] | undefined
 >(undefined);
 
 export default function DateProvider({ children }: { children: ReactNode }) {
   const [date, setDate] = useState(() =>
     calendarDateFromJsDateObject(new Date()),
   );
+  const [start, end] = useMemo<[CalendarDate, CalendarDate]>(
+    () => [
+      { year: 2024, month: "jan", day: 1 },
+      lastDateInMonth({ year: 2024, month: "dec" }),
+    ],
+    [],
+  );
 
   return (
-    <DateContext.Provider value={[date, setDate]}>
-      {children}
-    </DateContext.Provider>
+    <RangeContext.Provider value={[start, end]}>
+      <DateContext.Provider value={[date, setDate]}>
+        {children}
+      </DateContext.Provider>
+    </RangeContext.Provider>
   );
 }
