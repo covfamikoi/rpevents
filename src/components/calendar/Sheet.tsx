@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, ScrollView, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
@@ -180,7 +180,7 @@ function MonthPage({
   );
 }
 
-export default function CalendarSheet() {
+export default function CalendarSheet({ children }: { children: ReactNode }) {
   const theme = useTheme();
   const [date, _setDate] = useContext(DateContext)!;
   const [startDate, endDate] = useContext(RangeContext)!;
@@ -211,64 +211,72 @@ export default function CalendarSheet() {
   };
 
   return (
-    <BottomSheet
-      animatedIndex={animatedIndex}
-      index={0}
-      snapPoints={snapPoints}
-      style={{
-        shadowOpacity: 0.2,
-        shadowColor: theme.colors.shadow,
-        backgroundColor: theme.colors.elevation.level1,
-        borderRadius: 15,
-      }}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.tertiary }}
-      backgroundStyle={{ backgroundColor: theme.colors.elevation.level1 }}
-    >
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <Text>
-          {(function () {
-            const date = indexToMonth[currentIndex];
-            return `${date.month} ${date.year}`;
-          })()}
-        </Text>
-      </View>
-      <View
+    <>
+      <ScrollView
+        style={{ marginBottom: snapPoints[0] }}
+        contentInsetAdjustmentBehavior="automatic"
+      >
+        {children}
+      </ScrollView>
+      <BottomSheet
+        animatedIndex={animatedIndex}
+        index={0}
+        snapPoints={snapPoints}
         style={{
-          height: 15,
-          marginVertical: 5,
-          flexDirection: "row",
-          justifyContent: "space-evenly",
+          shadowOpacity: 0.2,
+          shadowColor: theme.colors.shadow,
+          backgroundColor: theme.colors.elevation.level1,
+          borderRadius: 15,
         }}
+        handleIndicatorStyle={{ backgroundColor: theme.colors.tertiary }}
+        backgroundStyle={{ backgroundColor: theme.colors.elevation.level1 }}
       >
-        <RowItem>Sun</RowItem>
-        <RowItem>Mon</RowItem>
-        <RowItem>Tue</RowItem>
-        <RowItem>Wed</RowItem>
-        <RowItem>Thu</RowItem>
-        <RowItem>Fri</RowItem>
-        <RowItem>Sat</RowItem>
-      </View>
-      <PagerView
-        onPageSelected={(pos) => setCurrentIndex(pos.nativeEvent.position)}
-        initialPage={0}
-        style={{ flex: 1 }}
-      >
-        {indexToMonth.map((month, idx) => {
-          const key = `${month.month}-${month.year}`;
-          if (currentIndex - 1 <= idx && idx <= currentIndex + 1) {
-            return (
-              <MonthPage
-                animatedIndex={animatedIndex}
-                date={date}
-                month={month}
-                key={key}
-              />
-            );
-          } else {
-            return <View key={key} />;
-          }
-        })}
-      </PagerView>
-    </BottomSheet>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <Text>
+            {(function () {
+              const date = indexToMonth[currentIndex];
+              return `${date.month} ${date.year}`;
+            })()}
+          </Text>
+        </View>
+        <View
+          style={{
+            height: 15,
+            marginVertical: 5,
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <RowItem>Sun</RowItem>
+          <RowItem>Mon</RowItem>
+          <RowItem>Tue</RowItem>
+          <RowItem>Wed</RowItem>
+          <RowItem>Thu</RowItem>
+          <RowItem>Fri</RowItem>
+          <RowItem>Sat</RowItem>
+        </View>
+        <PagerView
+          onPageSelected={(pos) => setCurrentIndex(pos.nativeEvent.position)}
+          initialPage={0}
+          style={{ flex: 1 }}
+        >
+          {indexToMonth.map((month, idx) => {
+            const key = `${month.month}-${month.year}`;
+            if (currentIndex - 1 <= idx && idx <= currentIndex + 1) {
+              return (
+                <MonthPage
+                  animatedIndex={animatedIndex}
+                  date={date}
+                  month={month}
+                  key={key}
+                />
+              );
+            } else {
+              return <View key={key} />;
+            }
+          })}
+        </PagerView>
+      </BottomSheet>
+    </>
   );
 }

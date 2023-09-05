@@ -13,8 +13,9 @@ type Props = NativeStackScreenProps<
 export default function CalendarView({}: Props) {
   return (
     <CalendarProvider>
-      <CalendarEvents />
-      <CalendarSheet />
+      <CalendarSheet>
+        <CalendarEvents />
+      </CalendarSheet>
     </CalendarProvider>
   );
 }
