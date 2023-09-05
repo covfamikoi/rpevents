@@ -257,6 +257,8 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
         {children}
       </ScrollView>
       <BottomSheet
+        activeOffsetX={999_999}
+        activeOffsetY={[-5, 5]}
         animatedIndex={animatedIndex}
         index={0}
         snapPoints={snapPoints}
