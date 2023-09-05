@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { Dimensions, Pressable, ScrollView, View } from "react-native";
 import PagerView from "react-native-pager-view";
-import { Text, useTheme } from "react-native-paper";
+import { Button, Text, useTheme } from "react-native-paper";
 import Animated, {
   SharedValue,
   interpolate,
@@ -12,6 +12,7 @@ import {
   CalendarDate,
   CalendarMonth,
   areInOrder,
+  calendarDateFromJsDateObject,
   datesEqual,
   dayOfWeek,
   lastDateInMonth,
@@ -272,6 +273,14 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
               return `${date.month} ${date.year}`;
             })()}
           </Text>
+          <Pressable
+            style={{ position: "absolute", right: 15 }}
+            onPress={() =>
+              setCurrentDate(calendarDateFromJsDateObject(new Date()))
+            }
+          >
+            <Text style={{ color: theme.colors.tertiary }}>Today</Text>
+          </Pressable>
         </View>
         <View
           style={{
