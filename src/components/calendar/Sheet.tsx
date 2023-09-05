@@ -25,14 +25,14 @@ import { DateContext, RangeContext } from "./Provider";
 
 function RowItem({
   children,
-  highlighted,
-  clickable,
-  onSelect,
+  highlighted = false,
+  clickable = false,
+  onSelect = null,
 }: {
   children: string;
-  highlighted: boolean;
-  clickable: boolean;
-  onSelect: (() => void) | null;
+  highlighted?: boolean;
+  clickable?: boolean;
+  onSelect?: (() => void) | null;
 }) {
   const theme = useTheme();
 
@@ -233,11 +233,16 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
     [startDate, endDate],
   );
 
-  const [currentIndex, _setCurrentIndex] = useState(0);
+  const [currentIndex, _setCurrentIndex] = useState(
+    monthToIndex.get(currentDate.month)!,
+  );
   useEffect(() => {
     _setCurrentIndex(monthToIndex.get(currentDate.month)!);
   }, [currentDate]);
   const setCurrentIndex = (number: number) => {
+    if (number === currentIndex) {
+      return;
+    }
     _setCurrentIndex(number);
     setCurrentDate({ ...indexToMonth[number], day: 1 });
   };
@@ -289,7 +294,7 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
         </View>
         <PagerView
           onPageSelected={(pos) => setCurrentIndex(pos.nativeEvent.position)}
-          initialPage={0}
+          initialPage={currentIndex}
           style={{ flex: 1 }}
         >
           {indexToMonth.map((month, idx) => {
