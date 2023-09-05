@@ -1,4 +1,11 @@
-import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Dimensions, Pressable, ScrollView, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Button, Text, useTheme } from "react-native-paper";
@@ -227,13 +234,14 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
     [startDate, endDate],
   );
 
+  const pager = useRef<PagerView>(null);
   const [currentIndex, _setCurrentIndex] = useState(
     monthToIndex.get(`${currentDate.year}-${currentDate.month}`)!,
   );
   useEffect(() => {
-    _setCurrentIndex(
-      monthToIndex.get(`${currentDate.year}-${currentDate.month}`)!,
-    );
+    const idx = monthToIndex.get(`${currentDate.year}-${currentDate.month}`)!;
+    _setCurrentIndex(idx);
+    pager.current?.setPage(idx);
   }, [currentDate]);
   const setCurrentIndex = (number: number) => {
     if (number === currentIndex) {
@@ -299,6 +307,7 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
           <RowItem>Sat</RowItem>
         </View>
         <PagerView
+          ref={pager}
           onPageSelected={(pos) => setCurrentIndex(pos.nativeEvent.position)}
           initialPage={currentIndex}
           style={{ flex: 1 }}
