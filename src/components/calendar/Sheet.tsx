@@ -180,16 +180,13 @@ function MonthPage({
             {row.map((_day, idx) => {
               const day = _day == null ? null : _day + 1;
               let selected: boolean;
-              let clickable: boolean;
               let onSelect: (() => void) | null = null;
               if (day === null) {
                 selected = false;
-                clickable = false;
               } else {
                 const thisDate = { ...firstDay, day: day };
                 selected = datesEqual(thisDate, currentDate);
                 onSelect = () => setCurrentDate(thisDate);
-                clickable = true;
               }
               return (
                 <RowItem
