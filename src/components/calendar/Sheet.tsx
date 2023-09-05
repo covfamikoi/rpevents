@@ -25,12 +25,10 @@ import { DateContext, RangeContext } from "./Provider";
 function RowItem({
   children,
   highlighted = false,
-  clickable = false,
   onSelect = null,
 }: {
   children: string;
   highlighted?: boolean;
-  clickable?: boolean;
   onSelect?: (() => void) | null;
 }) {
   const theme = useTheme();
@@ -196,7 +194,6 @@ function MonthPage({
               return (
                 <RowItem
                   key={`${key}-day-${day}-${idx}`}
-                  clickable={clickable}
                   onSelect={onSelect}
                   highlighted={selected}
                 >
