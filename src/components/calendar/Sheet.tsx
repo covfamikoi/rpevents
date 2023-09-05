@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { Dimensions, ScrollView, View } from "react-native";
+import { Dimensions, Pressable, ScrollView, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
@@ -25,15 +25,20 @@ import { DateContext, RangeContext } from "./Provider";
 
 function RowItem({
   children,
-  highlighted = false,
+  highlighted,
+  clickable,
+  onSelect,
 }: {
   children: string;
-  highlighted?: boolean;
+  highlighted: boolean;
+  clickable: boolean;
+  onSelect: (() => void) | null;
 }) {
   const theme = useTheme();
 
   return (
-    <View
+    <Pressable
+      onPress={onSelect}
       style={{
         width: 30,
         marginHorizontal: 5,
@@ -53,7 +58,7 @@ function RowItem({
       >
         {children}
       </Text>
-    </View>
+    </Pressable>
   );
 }
 
@@ -132,12 +137,14 @@ function offset(day: CalendarDate): number {
 function MonthPage({
   animatedIndex,
   month,
-  date,
+  currentDate,
+  setCurrentDate,
   key,
 }: {
   animatedIndex: SharedValue<number>;
   month: CalendarMonth;
-  date: CalendarDate;
+  currentDate: CalendarDate;
+  setCurrentDate: (arg0: CalendarDate) => void;
   key: string;
 }) {
   const firstDay: CalendarDate = { day: 1, ...month };
@@ -162,9 +169,9 @@ function MonthPage({
     <Animated.View key={key} style={{ flex: 1 }}>
       {data.map((row, idx) => {
         const rowSelected = areInOrder(
-          { ...firstDay, day: row.find((v) => v !== null)! },
-          date,
-          { ...firstDay, day: row.findLast((v) => v !== null)! },
+          { ...firstDay, day: row.find((v) => v !== null)! + 1 },
+          currentDate,
+          { ...firstDay, day: row.findLast((v) => v !== null)! + 1 },
         );
         return (
           <CalendarRow
@@ -175,15 +182,23 @@ function MonthPage({
           >
             {row.map((_day, idx) => {
               const day = _day == null ? null : _day + 1;
-              let selected;
+              let selected: boolean;
+              let clickable: boolean;
+              let onSelect: (() => void) | null = null;
               if (day === null) {
                 selected = false;
+                clickable = false;
               } else {
-                selected = datesEqual({ ...firstDay, day: day }, date);
+                const thisDate = { ...firstDay, day: day };
+                selected = datesEqual(thisDate, currentDate);
+                onSelect = () => setCurrentDate(thisDate);
+                clickable = true;
               }
               return (
                 <RowItem
                   key={`${key}-day-${day}-${idx}`}
+                  clickable={clickable}
+                  onSelect={onSelect}
                   highlighted={selected}
                 >
                   {day == null ? "" : day.toString()}
@@ -199,7 +214,7 @@ function MonthPage({
 
 export default function CalendarSheet({ children }: { children: ReactNode }) {
   const theme = useTheme();
-  const [date, _setDate] = useContext(DateContext)!;
+  const [currentDate, setCurrentDate] = useContext(DateContext)!;
   const [startDate, endDate] = useContext(RangeContext)!;
 
   const snapPoints = useMemo<[number, number]>(() => [110, 315], []);
@@ -220,11 +235,11 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
 
   const [currentIndex, _setCurrentIndex] = useState(0);
   useEffect(() => {
-    _setCurrentIndex(monthToIndex.get(date.month)!);
-  }, [date]);
+    _setCurrentIndex(monthToIndex.get(currentDate.month)!);
+  }, [currentDate]);
   const setCurrentIndex = (number: number) => {
     _setCurrentIndex(number);
-    _setDate({ ...indexToMonth[number], day: 1 });
+    setCurrentDate({ ...indexToMonth[number], day: 1 });
   };
 
   return (
@@ -283,7 +298,8 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
               return (
                 <MonthPage
                   animatedIndex={animatedIndex}
-                  date={date}
+                  currentDate={currentDate}
+                  setCurrentDate={setCurrentDate}
                   month={month}
                   key={key}
                 />
