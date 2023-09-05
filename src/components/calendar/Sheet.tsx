@@ -17,7 +17,6 @@ import {
   lastDateInMonth,
   periodOfMonths,
 } from "typescript-calendar-date";
-import { Month } from "typescript-calendar-date/dist/consts";
 
 import BottomSheet from "@gorhom/bottom-sheet";
 
@@ -224,9 +223,9 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
   const [indexToMonth, monthToIndex] = useMemo(
     function () {
       const indexToMonth = periodOfMonths(startDate, endDate);
-      const monthToIndex: Map<Month, number> = new Map();
+      const monthToIndex: Map<string, number> = new Map();
       indexToMonth.forEach((month, idx) => {
-        monthToIndex.set(month.month, idx);
+        monthToIndex.set(`${month.year}-${month.month}`, idx);
       });
       return [indexToMonth, monthToIndex];
     },
@@ -234,10 +233,12 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
   );
 
   const [currentIndex, _setCurrentIndex] = useState(
-    monthToIndex.get(currentDate.month)!,
+    monthToIndex.get(`${currentDate.year}-${currentDate.month}`)!,
   );
   useEffect(() => {
-    _setCurrentIndex(monthToIndex.get(currentDate.month)!);
+    _setCurrentIndex(
+      monthToIndex.get(`${currentDate.year}-${currentDate.month}`)!,
+    );
   }, [currentDate]);
   const setCurrentIndex = (number: number) => {
     if (number === currentIndex) {

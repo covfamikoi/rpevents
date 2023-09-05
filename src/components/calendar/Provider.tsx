@@ -22,8 +22,8 @@ export default function CalendarProvider({
   );
   const [start, end] = useMemo<[CalendarDate, CalendarDate]>(
     () => [
-      { year: 2023, month: "jan", day: 1 },
-      lastDateInMonth({ year: 2023, month: "dec" }),
+      { year: date.year - 1, month: "jan", day: 1 },
+      lastDateInMonth({ year: date.year + 1, month: "dec" }),
     ],
     [],
   );
