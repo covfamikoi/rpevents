@@ -11,6 +11,8 @@ import Animated, {
 import {
   CalendarDate,
   CalendarMonth,
+  areInOrder,
+  datesEqual,
   dayOfWeek,
   lastDateInMonth,
   periodOfMonths,
@@ -159,16 +161,31 @@ function MonthPage({
   return (
     <Animated.View key={key} style={{ flex: 1 }}>
       {data.map((row, idx) => {
+        const rowSelected = areInOrder(
+          { ...firstDay, day: row.find((v) => v !== null)! },
+          date,
+          { ...firstDay, day: row.findLast((v) => v !== null)! },
+        );
         return (
           <CalendarRow
             key={`${key}-row-${idx}`}
             index={idx}
             animatedIndex={animatedIndex}
+            selected={rowSelected}
           >
             {row.map((_day, idx) => {
               const day = _day == null ? null : _day + 1;
+              let selected;
+              if (day === null) {
+                selected = false;
+              } else {
+                selected = datesEqual({ ...firstDay, day: day }, date);
+              }
               return (
-                <RowItem key={`${key}-day-${day}-${idx}`}>
+                <RowItem
+                  key={`${key}-day-${day}-${idx}`}
+                  highlighted={selected}
+                >
                   {day == null ? "" : day.toString()}
                 </RowItem>
               );
