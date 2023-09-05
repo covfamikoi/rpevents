@@ -10,11 +10,13 @@ type Props = NativeStackScreenProps<
   "ViewConferenceCalendar"
 >;
 
-export default function CalendarView({}: Props) {
+export default function CalendarView({ route }: Props) {
+  const conference = route.params.conference;
+
   return (
     <CalendarProvider>
       <CalendarSheet>
-        <CalendarEvents />
+        <CalendarEvents events={conference.data.events} />
       </CalendarSheet>
     </CalendarProvider>
   );
