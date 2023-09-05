@@ -6,7 +6,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { Dimensions, Pressable, ScrollView, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import PagerView from "react-native-pager-view";
 import { Button, Text, useTheme } from "react-native-paper";
 import Animated, {
@@ -218,7 +224,7 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
   const [currentDate, setCurrentDate] = useContext(DateContext)!;
   const [startDate, endDate] = useContext(RangeContext)!;
 
-  const snapPoints = useMemo<[number, number]>(() => [110, 315], []);
+  const snapPoints = useMemo<[number, number]>(() => [120, 335], []);
 
   const animatedIndex = useSharedValue(0);
 
@@ -273,22 +279,25 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
         }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.tertiary }}
         backgroundStyle={{ backgroundColor: theme.colors.elevation.level1 }}
+        handleStyle={{ zIndex: 998 }}
       >
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <View
+          style={{ height: 30, flexDirection: "row", justifyContent: "center" }}
+        >
           <Text>
             {(function () {
               const date = indexToMonth[currentIndex];
               return `${date.month} ${date.year}`;
             })()}
           </Text>
-          <Pressable
+          <TouchableOpacity
             style={{ position: "absolute", right: 15 }}
             onPress={() =>
               setCurrentDate(calendarDateFromJsDateObject(new Date()))
             }
           >
             <Text style={{ color: theme.colors.tertiary }}>Today</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <View
           style={{
