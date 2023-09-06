@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import PagerView from "react-native-pager-view";
-import { Button, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import Animated, {
   SharedValue,
   interpolate,
