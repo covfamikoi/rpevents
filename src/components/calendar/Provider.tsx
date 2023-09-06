@@ -2,7 +2,6 @@ import { ReactNode, createContext, useMemo, useState } from "react";
 import {
   CalendarDate,
   calendarDateFromJsDateObject,
-  lastDateInMonth,
 } from "typescript-calendar-date";
 
 export const DateContext = createContext<
@@ -22,8 +21,8 @@ export default function CalendarProvider({
   );
   const [start, end] = useMemo<[CalendarDate, CalendarDate]>(
     () => [
-      { year: date.year - 1, month: "jan", day: 1 },
-      lastDateInMonth({ year: date.year + 1, month: "dec" }),
+      { year: date.year, month: "jan", day: 1 },
+      { year: date.year + 1, month: "jan", day: 1 },
     ],
     [],
   );

@@ -1,14 +1,16 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
+import PagerView from "react-native-pager-view";
 import { Text, Title, useTheme } from "react-native-paper";
 import {
   CalendarDate,
   calendarDateFromJsDateObject,
+  periodOfDates,
 } from "typescript-calendar-date";
 
 import { Event } from "../../models";
 
-import { DateContext } from "./Provider";
+import { DateContext, RangeContext } from "./Provider";
 
 interface EventItem {
   title: string;
@@ -79,6 +81,7 @@ function dateToString(date: CalendarDate): string {
 
 export default function CalendarEvents({ events }: { events: Event[] }) {
   const [currentDate, _setCurrentDate] = useContext(DateContext)!;
+  const [startDate, endDate] = useContext(RangeContext)!;
 
   const eventsByDay = useMemo<Map<string, EventItem[]>>(() => {
     let eventsByDay = new Map<string, EventItem[]>();
@@ -100,16 +103,62 @@ export default function CalendarEvents({ events }: { events: Event[] }) {
     return eventsByDay;
   }, [events]);
 
-  const todaysEvents = useMemo(
-    () => eventsByDay.get(dateToString(currentDate)),
-    [eventsByDay, currentDate],
+  const eventItems = useMemo<[CalendarDate, EventItem[]][]>(() => {
+    return periodOfDates(startDate, endDate).map((date) => {
+      const key = dateToString(date);
+      if (!eventsByDay.has(key)) {
+        return [date, []];
+      }
+
+      return [date, eventsByDay.get(key)!];
+    });
+  }, [eventsByDay]);
+  const dateToIndex = useMemo<Map<string, number>>(() => {
+    const dateToIndex: Map<string, number> = new Map();
+    eventItems.forEach(([date], idx) =>
+      dateToIndex.set(dateToString(date), idx),
+    );
+    return dateToIndex;
+  }, [eventItems]);
+
+  const pager = useRef<PagerView>(null);
+
+  const [currentIndex, setCurrentIndex] = useState(
+    dateToIndex.get(dateToString(currentDate))!,
   );
+  const onPageChange = (index: number) => {
+    setCurrentIndex(index);
+    _setCurrentDate(eventItems[index][0]);
+  };
+  useEffect(() => {
+    console.log(2);
+    const index = dateToIndex.get(dateToString(currentDate))!;
+    setCurrentIndex(index);
+    pager.current?.setPage(index);
+  }, [currentDate]);
 
   return (
-    <FlatList
-      contentInsetAdjustmentBehavior="automatic"
-      data={todaysEvents}
-      renderItem={(item) => <TimelineItem item={item.item} />}
-    />
+    <PagerView
+      initialPage={currentIndex}
+      ref={pager}
+      onPageSelected={(event) => onPageChange(event.nativeEvent.position)}
+      style={{ flex: 1 }}
+    >
+      {eventItems.map(([_, events], idx) => {
+        if (idx < currentIndex - 1 || idx > currentIndex + 1) {
+          return <View key={idx.toString()} />;
+        }
+
+        return (
+          <View key={idx.toString()} style={{ flex: 1 }}>
+            <FlatList
+              contentInsetAdjustmentBehavior="automatic"
+              data={events}
+              renderItem={(item) => <TimelineItem item={item.item} />}
+            />
+          </View>
+        );
+      })}
+    </PagerView>
   );
 }
