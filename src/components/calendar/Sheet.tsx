@@ -259,12 +259,7 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <ScrollView
-        style={{ marginBottom: snapPoints[0] }}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        {children}
-      </ScrollView>
+      <View style={{ marginBottom: snapPoints[0], flex: 1 }}>{children}</View>
       <BottomSheet
         activeOffsetX={999_999}
         activeOffsetY={[-5, 5]}
