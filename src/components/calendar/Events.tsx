@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, ScrollView, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, Title, useTheme } from "react-native-paper";
 import {
@@ -131,7 +131,6 @@ export default function CalendarEvents({ events }: { events: Event[] }) {
     _setCurrentDate(eventItems[index][0]);
   };
   useEffect(() => {
-    console.log(2);
     const index = dateToIndex.get(dateToString(currentDate))!;
     setCurrentIndex(index);
     pager.current?.setPage(index);
@@ -151,11 +150,30 @@ export default function CalendarEvents({ events }: { events: Event[] }) {
 
         return (
           <View key={idx.toString()} style={{ flex: 1 }}>
-            <FlatList
-              contentInsetAdjustmentBehavior="automatic"
-              data={events}
-              renderItem={(item) => <TimelineItem item={item.item} />}
-            />
+            {(function () {
+              if (events.length === 0) {
+                return (
+                  <ScrollView contentInsetAdjustmentBehavior="automatic">
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text>No events to show.</Text>
+                    </View>
+                  </ScrollView>
+                );
+              } else {
+                return (
+                  <FlatList
+                    contentInsetAdjustmentBehavior="automatic"
+                    data={events}
+                    renderItem={(item) => <TimelineItem item={item.item} />}
+                  />
+                );
+              }
+            })()}
           </View>
         );
       })}
