@@ -110,7 +110,12 @@ export default function CalendarEvents({ events }: { events: Event[] }) {
         return [date, []];
       }
 
-      return [date, eventsByDay.get(key)!];
+      return [
+        date,
+        eventsByDay
+          .get(key)!
+          .sort((a, b) => a.start.getTime() - b.start.getTime()),
+      ];
     });
   }, [eventsByDay]);
   const dateToIndex = useMemo<Map<string, number>>(() => {
