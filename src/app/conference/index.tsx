@@ -3,15 +3,16 @@ import { List } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { useConferenceStream } from "../../database";
+import { useConferenceStream } from "../../contexts/conferenceStream";
 
 import { RootStackParamList } from "..";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
 
 export default function ViewConference({ navigation, route }: Props) {
-  const conference = useConferenceStream(route.params.conference, () =>
-    navigation.goBack(),
+  const conference = useConferenceStream(
+    route.params.conference,
+    navigation.goBack,
   );
 
   return (

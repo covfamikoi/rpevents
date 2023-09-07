@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { CalendarEvents, CalendarSheet } from "../../components";
 import { CalendarProvider } from "../../components";
-import { useConferenceStream } from "../../database";
+import { useConferenceStream } from "../../contexts/conferenceStream";
 
 import { RootStackParamList } from "..";
 
