@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import AuthStateProvider from "./auth";
+import ConferenceStreamProvider from "./conferenceStream";
 import ConferencesProvider from "./conferences";
 import ThemeProvider from "./theme";
 
@@ -12,7 +13,9 @@ export default function RootContextProvider({ children }: Props) {
   return (
     <ThemeProvider>
       <AuthStateProvider>
-        <ConferencesProvider>{children}</ConferencesProvider>
+        <ConferencesProvider>
+          <ConferenceStreamProvider>{children}</ConferenceStreamProvider>
+        </ConferencesProvider>
       </AuthStateProvider>
     </ThemeProvider>
   );
