@@ -1,36 +1,18 @@
-import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { List } from "react-native-paper";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { RefreshConferencexContext } from "../../contexts/conferences";
-import { conferenceCollection } from "../../database";
-import { Conference, Document } from "../../models";
+import { useConferenceStream } from "../../database";
 
 import { RootStackParamList } from "..";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ViewConference">;
 
 export default function ViewConference({ navigation, route }: Props) {
-  const refreshConferences = useContext(RefreshConferencexContext);
-  const [conference, setConference] = useState<Document<Conference>>(
-    route.params.conference,
+  const conference = useConferenceStream(route.params.conference, () =>
+    navigation.goBack(),
   );
-
-  useEffect(() => {
-    return conferenceCollection.doc(conference.id).onSnapshot({
-      next: (doc) => {
-        const data = doc.data();
-        if (data === undefined) {
-          navigation.goBack();
-        } else {
-          setConference({ id: doc.id, data: data });
-        }
-        refreshConferences();
-      },
-    });
-  }, [conference.id]);
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
