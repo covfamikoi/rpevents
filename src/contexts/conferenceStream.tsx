@@ -10,19 +10,19 @@ import {
 import { conferenceCollection } from "../database";
 import { Conference, Document } from "../models";
 
+import { RefreshConferencexContext } from "./conferences";
+
 export function useConferenceStream(
   initial: Document<Conference>,
   onDelete: () => void,
 ) {
   const conferenceStream = useContext(ConferenceStreamContext);
+  const refreshConferences = useContext(RefreshConferencexContext);
   useEffect(() => {
     conferenceStream.setId(initial.id);
   }, [initial.id]);
   const conference = useMemo(() => {
     if (conferenceStream.conference === undefined) {
-      if (!conferenceStream.loading) {
-        onDelete();
-      }
       return initial;
     } else if (conferenceStream.conference.id !== initial.id) {
       return initial;
@@ -30,6 +30,16 @@ export function useConferenceStream(
       return conferenceStream.conference;
     }
   }, [conferenceStream.conference, initial]);
+
+  const deleted =
+    conferenceStream.conference === undefined && !conferenceStream.loading;
+
+  useEffect(() => {
+    if (deleted) {
+      onDelete();
+      refreshConferences();
+    }
+  }, [deleted, initial.id]);
 
   return conference;
 }
@@ -74,7 +84,6 @@ export default function ConferenceStreamProvider({
 
     return conferenceCollection.doc(conferenceId).onSnapshot({
       next: (doc) => {
-        console.log("read");
         const data = doc.data();
         const newConference = data ? { id: doc.id, data: data } : undefined;
         setConference({

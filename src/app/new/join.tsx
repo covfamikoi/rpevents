@@ -16,6 +16,8 @@ import { conferenceCollection } from "../../database";
 type Props = MaterialTopTabScreenProps<ParamListBase>;
 
 export default function JoinConference({ navigation }: Props) {
+  const refreshConferences = useContext(RefreshConferencexContext);
+
   const conferences = useContext(ConferencesContext);
   const [err, setErr] = useState("");
 
@@ -42,6 +44,7 @@ export default function JoinConference({ navigation }: Props) {
           case undefined:
             return setErr("missing");
           default:
+            refreshConferences();
             const doc = { id: conf.id, data: data };
             navigation.goBack();
             navigation.navigate("ViewConference", { conference: doc });

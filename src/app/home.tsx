@@ -1,5 +1,11 @@
 import Fuse from "fuse.js";
-import { useContext, useEffect, useMemo, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { FlatList } from "react-native";
 import { List, useTheme } from "react-native-paper";
 
@@ -28,7 +34,7 @@ export default function Home({ navigation }: Props) {
 
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerSearchBarOptions: {
         onChangeText: (text) => setSearch(text.nativeEvent.text),
