@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { IconButton } from "react-native-paper";
 
 import { NavigationProp, RouteProp } from "@react-navigation/native";
@@ -56,63 +57,65 @@ function withAccountButton<name extends keyof RootStackParamList>(
 
 export default function Index() {
   return (
-    <RootContextProvider>
-      <StatusBar style="auto" animated={true} />
-      <Stack.Navigator
-        screenOptions={{
-          headerTransparent: Platform.OS === "ios",
-          headerBlurEffect: "regular",
-        }}
-      >
-        <Stack.Screen
-          component={Home}
-          name="Home"
-          options={withAccountButton(() => ({
-            title: "Conferences",
-            headerLargeTitle: true,
-          }))}
-        />
-        <Stack.Screen
-          component={ViewConference}
-          name="ViewConference"
-          options={withAccountButton(({ route }) => ({
-            title: route.params.conference.data.title,
-            headerLargeTitle: true,
-          }))}
-        />
-        <Stack.Screen
-          component={ViewConferenceAnnouncements}
-          name="ViewConferenceAnnouncements"
-          options={withAccountButton(() => ({
-            title: "Announcements",
-          }))}
-        />
-        <Stack.Screen
-          component={ViewConferenceCalendar}
-          name="ViewConferenceCalendar"
-          options={withAccountButton(() => ({
-            title: "Calendar",
-          }))}
-        />
-        <Stack.Screen
-          component={ViewConferenceMap}
-          name="ViewConferenceMap"
-          options={withAccountButton(() => ({ title: "Map" }))}
-        />
-        <Stack.Screen
-          component={NewConference}
-          name="NewConference"
-          options={withAccountButton(() => ({
-            presentation: "modal",
-            title: "Add Conference",
-          }))}
-        />
-        <Stack.Screen
-          component={UserModal}
-          name="User"
-          options={{ presentation: "modal", title: "Account" }}
-        />
-      </Stack.Navigator>
-    </RootContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootContextProvider>
+        <StatusBar style="auto" animated={true} />
+        <Stack.Navigator
+          screenOptions={{
+            headerTransparent: Platform.OS === "ios",
+            headerBlurEffect: "regular",
+          }}
+        >
+          <Stack.Screen
+            component={Home}
+            name="Home"
+            options={withAccountButton(() => ({
+              title: "Conferences",
+              headerLargeTitle: true,
+            }))}
+          />
+          <Stack.Screen
+            component={ViewConference}
+            name="ViewConference"
+            options={withAccountButton(({ route }) => ({
+              title: route.params.conference.data.title,
+              headerLargeTitle: true,
+            }))}
+          />
+          <Stack.Screen
+            component={ViewConferenceAnnouncements}
+            name="ViewConferenceAnnouncements"
+            options={withAccountButton(() => ({
+              title: "Announcements",
+            }))}
+          />
+          <Stack.Screen
+            component={ViewConferenceCalendar}
+            name="ViewConferenceCalendar"
+            options={withAccountButton(() => ({
+              title: "Calendar",
+            }))}
+          />
+          <Stack.Screen
+            component={ViewConferenceMap}
+            name="ViewConferenceMap"
+            options={withAccountButton(() => ({ title: "Map" }))}
+          />
+          <Stack.Screen
+            component={NewConference}
+            name="NewConference"
+            options={withAccountButton(() => ({
+              presentation: "modal",
+              title: "Add Conference",
+            }))}
+          />
+          <Stack.Screen
+            component={UserModal}
+            name="User"
+            options={{ presentation: "modal", title: "Account" }}
+          />
+        </Stack.Navigator>
+      </RootContextProvider>
+    </GestureHandlerRootView>
   );
 }

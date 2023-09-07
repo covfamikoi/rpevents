@@ -1,7 +1,7 @@
-import { ScrollView } from "react-native";
-import { Text } from "react-native-paper";
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+import { CalendarEvents, CalendarSheet } from "../../components";
+import { CalendarProvider } from "../../components";
 
 import { RootStackParamList } from "..";
 
@@ -10,10 +10,14 @@ type Props = NativeStackScreenProps<
   "ViewConferenceCalendar"
 >;
 
-export default function ViewConferenceCalendar({}: Props) {
+export default function CalendarView({ route }: Props) {
+  const conference = route.params.conference;
+
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <Text>Calendar</Text>
-    </ScrollView>
+    <CalendarProvider>
+      <CalendarSheet>
+        <CalendarEvents events={conference.data.events} />
+      </CalendarSheet>
+    </CalendarProvider>
   );
 }
