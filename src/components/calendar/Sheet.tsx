@@ -6,13 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  Dimensions,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, TouchableOpacity, View } from "react-native";
 import PagerView from "react-native-pager-view";
 import { Text, useTheme } from "react-native-paper";
 import Animated, {
@@ -264,6 +258,13 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
         activeOffsetX={999_999}
         activeOffsetY={[-5, 5]}
         animatedIndex={animatedIndex}
+        onChange={(index) => {
+          if (index === 0) {
+            pager.current?.setScrollEnabled(false);
+          } else {
+            pager.current?.setScrollEnabled(true);
+          }
+        }}
         index={0}
         snapPoints={snapPoints}
         style={{
@@ -312,6 +313,7 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
         </View>
         <PagerView
           ref={pager}
+          scrollEnabled={false}
           onPageSelected={(pos) => setCurrentIndex(pos.nativeEvent.position)}
           initialPage={currentIndex}
           style={{ flex: 1 }}
