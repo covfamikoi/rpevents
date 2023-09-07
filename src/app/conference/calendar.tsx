@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { CalendarEvents, CalendarSheet } from "../../components";
 import { CalendarProvider } from "../../components";
+import { useConferenceStream } from "../../database";
 
 import { RootStackParamList } from "..";
 
@@ -10,8 +11,10 @@ type Props = NativeStackScreenProps<
   "ViewConferenceCalendar"
 >;
 
-export default function CalendarView({ route }: Props) {
-  const conference = route.params.conference;
+export default function CalendarView({ route, navigation }: Props) {
+  const conference = useConferenceStream(route.params.conference, () =>
+    navigation.goBack(),
+  );
 
   return (
     <CalendarProvider>
