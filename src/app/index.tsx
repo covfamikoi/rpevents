@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { IconButton } from "react-native-paper";
@@ -59,7 +58,6 @@ export default function Index() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <RootContextProvider>
-        <StatusBar style="auto" animated={true} />
         <Stack.Navigator
           screenOptions={{
             headerTransparent: Platform.OS === "ios",

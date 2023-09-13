@@ -1,4 +1,3 @@
-import FocusAwareLightStatusBar from "./FocusAwareLightStatusBar";
 import HiddenHelperText from "./HiddenHelperText";
 import CalendarEvents from "./calendar/Events";
 import CalendarProvider, {
@@ -20,7 +19,6 @@ export {
   MTextInput,
   Tabs,
   TabButton,
-  FocusAwareLightStatusBar,
   HiddenHelperText,
   CalendarEvents,
   CalendarProvider,
