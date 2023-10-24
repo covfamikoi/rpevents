@@ -218,7 +218,7 @@ export default function CalendarSheet({ children }: { children: ReactNode }) {
   const [currentDate, setCurrentDate] = useContext(DateContext)!;
   const [startDate, endDate] = useContext(RangeContext)!;
 
-  const snapPoints = useMemo<[number, number]>(() => [120, 335], []);
+  const snapPoints = useMemo<[number, number]>(() => [135, 350], []);
 
   const animatedIndex = useSharedValue(0);
 

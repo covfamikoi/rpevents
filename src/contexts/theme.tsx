@@ -1,5 +1,7 @@
+import { StatusBar } from "expo-status-bar";
 import { ReactNode, useMemo } from "react";
 import { useColorScheme } from "react-native";
+import { Platform } from "react-native";
 import {
   MD3DarkTheme,
   MD3LightTheme,
@@ -37,6 +39,9 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   return (
     <PaperProvider theme={paperTheme}>
       <NavigationContainer theme={navigationTheme}>
+        {Platform.OS === "android" && (
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        )}
         {children}
       </NavigationContainer>
     </PaperProvider>
